@@ -1,6 +1,7 @@
-import { db } from '@/lib/db';
-import { UniversityStatus } from '@prisma/client';
-import { NextRequest, NextResponse } from 'next/server';
+import { db } from "@/lib/db";
+import { generateSlug } from "@/lib/generateSlug";
+import { UniversityStatus } from "@prisma/client";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   const apiKey = req.headers.get("x-api-key");
