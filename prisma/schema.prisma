@@ -24,9 +24,14 @@ enum CourseLevel {
   PHD
 }
 
+enum CourseStatus {
+  UnderReview
+  Active
+}
+
 enum UniversityStatus {
-  PUBLIC
-  PRIVATE
+  Public
+  Private
 }
 
 model User {
@@ -134,7 +139,7 @@ model Student {
   completionYear    Int?
   preferredCampuses University[]
   subjectIds        String[]
-  
+
   // Academic details
   subjectCombinations SubjectCombination[]
   // gradePoints         GradePoint[]
@@ -178,8 +183,9 @@ model University {
   slug        String           @unique
   name        String
   description String?
-  status      UniversityStatus @default(PUBLIC)
+  status      UniversityStatus @default(Public)
   location    String?
+  district    String?
   website     String?
   logo        String?          @default("https://1k60xyo2z1.ufs.sh/f/Guex3D2XmynflHpmmO9BbCEUzjguTyNW9iB7PtwY4XZVAxL5")
 
@@ -193,16 +199,18 @@ model University {
 
 // Course model
 model Course {
-  id                  String      @id @default(cuid())
-  name                String
-  code                String? // Course code like "MET", "DPP", etc.
-  slug                String      @unique
-  description         String?
-  keywords            String[]
-  duration            Int // In years
-  entryPoints         Int?
-  level               CourseLevel // Diploma, Bachelors, Masters, PhD
-  specialRequirements String? // Like "An applicant must have passed Biology at 'O' Level"
+  id             String        @id @default(cuid())
+  name           String
+  code           String? // Course code like "MET", "DPP", etc.
+  slug           String        @unique
+  status         CourseStatus? @default(Active)
+  accreditedDate DateTime?
+  expiryDate     DateTime?
+  // keywords            String[]
+  duration       Int? // In years
+  entryPoints    Int?
+  level          CourseLevel?  @default(CERTIFICATE) // Diploma, Bachelors, Masters, PhD
+  // specialRequirements String? // Like "An applicant must have passed Biology at 'O' Level"
 
   // Relations
   universityId String

@@ -1,4 +1,5 @@
 import { db } from '@/lib/db';
+import { generateSlug } from '@/lib/generateSlug';
 import { UniversityStatus } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -32,8 +33,8 @@ export async function POST(req: NextRequest) {
     const universitiesToCreate = universities.map((university) => ({
       name: university.name,
       description: university.description || null,
-      slug: university.slug,
-      status: UniversityStatus.PUBLIC,
+      slug: generateSlug(university.name),
+      status: UniversityStatus.Public,
       logo:
         university.logo ||
         'https://1k60xyo2z1.ufs.sh/f/Guex3D2XmynflHpmmO9BbCEUzjguTyNW9iB7PtwY4XZVAxL5',
