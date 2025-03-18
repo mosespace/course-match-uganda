@@ -25,7 +25,7 @@ const formSchema = z
     }),
     confirmPassword: z.string(),
   })
-  .refine((data) => data.password === data.confirmPassword, {
+  .refine(data => data.password === data.confirmPassword, {
     message: 'Passwords do not match',
     path: ['confirmPassword'],
   });
@@ -60,7 +60,7 @@ export default function SignUpForm() {
       if (result.success) {
         toast.success(
           'Account created!',
-          'Your company account has been created successfully.',
+          'Your company account has been created successfully.'
         );
         // Sign in the user after account creation
         const signInResult = await signIn('credentials', {
@@ -72,7 +72,7 @@ export default function SignUpForm() {
         if (signInResult?.error) {
           toast.error(
             'Sign in failed',
-            "Your account was created but we couldn't sign you in automatically.",
+            "Your account was created but we couldn't sign you in automatically."
           );
           router.push('/login');
         } else {

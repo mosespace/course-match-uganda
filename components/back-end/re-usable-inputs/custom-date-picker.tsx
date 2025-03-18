@@ -31,7 +31,7 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
         render={({ field }) => (
           <DatePicker
             selected={field.value}
-            onChange={(date) => field.onChange(date)}
+            onChange={date => field.onChange(date)}
             dateFormat="MMMM d, yyyy"
             className={`w-full placeholder:text-black/60 p-2 border shadow-sm rounded-md ${className}`}
             placeholderText={`Select ${label.toLowerCase()}`}

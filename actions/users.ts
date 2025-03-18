@@ -83,7 +83,7 @@ export async function sendResetLink(email: string) {
 export async function resetUserPassword(
   email: string,
   token: string,
-  newPassword: string,
+  newPassword: string
 ) {
   const user = await db.user.findUnique({
     where: {

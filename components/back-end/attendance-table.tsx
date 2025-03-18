@@ -102,7 +102,7 @@ export function AttendanceTable({
   const getInitials = (name: string) => {
     return name
       .split(' ')
-      .map((part) => part[0])
+      .map(part => part[0])
       .join('')
       .toUpperCase()
       .substring(0, 2);
@@ -119,7 +119,7 @@ export function AttendanceTable({
               placeholder="Search by name..."
               className="pl-8"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={e => setSearchQuery(e.target.value)}
             />
           </form>
         )}
@@ -159,7 +159,7 @@ export function AttendanceTable({
                 </TableCell>
               </TableRow>
             ) : (
-              records.map((record) => (
+              records.map(record => (
                 <TableRow key={record.id}>
                   <TableCell>
                     <div className="flex items-center gap-3">
@@ -190,7 +190,7 @@ export function AttendanceTable({
                       : record.checkOutTime
                         ? calculateHoursDifference(
                             record.checkInTime,
-                            record.checkOutTime,
+                            record.checkOutTime
                           )
                         : '--'}
                   </TableCell>

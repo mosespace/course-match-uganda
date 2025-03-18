@@ -87,7 +87,7 @@ export default function ActionColumn({
   // Utilities
   const capitalizeFirstLetter = useCallback(
     (str: string) => (str ? str.charAt(0).toUpperCase() + str.slice(1) : ''),
-    [],
+    []
   );
 
   // Handlers
@@ -108,7 +108,7 @@ export default function ActionColumn({
       await deleteAction({ id });
       toast.success(
         'Success',
-        `${capitalizeFirstLetter(model)} deleted successfully`,
+        `${capitalizeFirstLetter(model)} deleted successfully`
       );
       setIsOpen(false);
       window.location.reload();
@@ -117,7 +117,7 @@ export default function ActionColumn({
         error instanceof Error ? error.message : 'An unexpected error occurred';
       toast.error(
         'Error',
-        `Failed to delete ${model.toLowerCase()}: ${errorMessage}`,
+        `Failed to delete ${model.toLowerCase()}: ${errorMessage}`
       );
     } finally {
       setIsPending(false);
@@ -222,7 +222,7 @@ export default function ActionColumn({
             <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
               <AlertDialogTrigger asChild>
                 <DropdownMenuItem
-                  onSelect={(e) => e.preventDefault()}
+                  onSelect={e => e.preventDefault()}
                   className="text-destructive cursor-pointer text-sm"
                 >
                   <Trash2 className="mr-2 h-4 w-4" />

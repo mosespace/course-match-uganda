@@ -155,7 +155,7 @@ export function BankingSettings() {
                   </h2>
                   <Select
                     value={accountType}
-                    onChange={(option) => setAccountType(option as Option)}
+                    onChange={option => setAccountType(option as Option)}
                     options={accountTypes}
                     isClearable={true}
                     primaryColor="emerald"

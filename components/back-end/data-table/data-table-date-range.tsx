@@ -47,7 +47,7 @@ export default function DateRangeFilter({
             variant={'outline'}
             className={cn(
               'w-[300px] justify-start text-left font-normal',
-              !date && 'text-muted-foreground',
+              !date && 'text-muted-foreground'
             )}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
@@ -71,7 +71,7 @@ export default function DateRangeFilter({
             mode="range"
             defaultMonth={date?.from}
             selected={date}
-            onSelect={(value) => handleChange(value)}
+            onSelect={value => handleChange(value)}
             numberOfMonths={2}
           />
         </PopoverContent>

@@ -27,7 +27,7 @@ const FileInput = ({
 
   const isImage = (url: string) => {
     const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'];
-    return imageExtensions.some((ext) => url.toLowerCase().endsWith(ext));
+    return imageExtensions.some(ext => url.toLowerCase().endsWith(ext));
   };
 
   const isPDF = (url: string) => {

@@ -74,7 +74,7 @@ export function NotificationSettings() {
     setTimeout(() => {
       toast.success(
         'Notification settings saved',
-        'Your notification preferences have been updated',
+        'Your notification preferences have been updated'
       );
       setIsLoading(false);
     }, 1000);
@@ -125,7 +125,7 @@ export function NotificationSettings() {
                 <Switch
                   id="push-checkin"
                   checked={pushNotifications.checkInReminders}
-                  onCheckedChange={(checked) =>
+                  onCheckedChange={checked =>
                     setPushNotifications({
                       ...pushNotifications,
                       checkInReminders: checked,
@@ -145,7 +145,7 @@ export function NotificationSettings() {
                 <Switch
                   id="push-checkout"
                   checked={pushNotifications.checkOutReminders}
-                  onCheckedChange={(checked) =>
+                  onCheckedChange={checked =>
                     setPushNotifications({
                       ...pushNotifications,
                       checkOutReminders: checked,
@@ -165,7 +165,7 @@ export function NotificationSettings() {
                 <Switch
                   id="push-notices"
                   checked={pushNotifications.adminNotices}
-                  onCheckedChange={(checked) =>
+                  onCheckedChange={checked =>
                     setPushNotifications({
                       ...pushNotifications,
                       adminNotices: checked,
@@ -185,7 +185,7 @@ export function NotificationSettings() {
                 <Switch
                   id="push-leave"
                   checked={pushNotifications.leaveApprovals}
-                  onCheckedChange={(checked) =>
+                  onCheckedChange={checked =>
                     setPushNotifications({
                       ...pushNotifications,
                       leaveApprovals: checked,
@@ -221,7 +221,7 @@ export function NotificationSettings() {
               <Switch
                 id="email-checkin"
                 checked={emailNotifications.checkInReminders}
-                onCheckedChange={(checked) =>
+                onCheckedChange={checked =>
                   setEmailNotifications({
                     ...emailNotifications,
                     checkInReminders: checked,
@@ -241,7 +241,7 @@ export function NotificationSettings() {
               <Switch
                 id="email-checkout"
                 checked={emailNotifications.checkOutReminders}
-                onCheckedChange={(checked) =>
+                onCheckedChange={checked =>
                   setEmailNotifications({
                     ...emailNotifications,
                     checkOutReminders: checked,
@@ -261,7 +261,7 @@ export function NotificationSettings() {
               <Switch
                 id="email-notices"
                 checked={emailNotifications.adminNotices}
-                onCheckedChange={(checked) =>
+                onCheckedChange={checked =>
                   setEmailNotifications({
                     ...emailNotifications,
                     adminNotices: checked,
@@ -281,7 +281,7 @@ export function NotificationSettings() {
               <Switch
                 id="email-leave"
                 checked={emailNotifications.leaveApprovals}
-                onCheckedChange={(checked) =>
+                onCheckedChange={checked =>
                   setEmailNotifications({
                     ...emailNotifications,
                     leaveApprovals: checked,

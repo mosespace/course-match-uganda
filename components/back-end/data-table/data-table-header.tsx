@@ -333,9 +333,9 @@ export default function TableHeader({
                                 accept=".xls,.xlsx"
                                 type="file"
                                 className="hidden"
-                                onChange={(e) =>
+                                onChange={e =>
                                   setExcelFile(
-                                    e.target.files ? e.target.files[0] : null,
+                                    e.target.files ? e.target.files[0] : null
                                   )
                                 }
                               />

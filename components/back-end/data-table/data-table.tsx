@@ -69,7 +69,7 @@ export default function DataTable<TData, TValue>({
   // Memoize the final data to prevent unnecessary re-renders
   const tableData = useMemo(
     () => (searchActive ? filteredData : data),
-    [searchActive, filteredData, data],
+    [searchActive, filteredData, data]
   );
 
   const table = useReactTable({
@@ -155,18 +155,16 @@ export default function DataTable<TData, TValue>({
               <DropdownMenuLabel>Filter by Status</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuCheckboxItem
-                checked={!columnFilters.some((f) => f.id === 'status')}
+                checked={!columnFilters.some(f => f.id === 'status')}
                 onCheckedChange={() => {
-                  setColumnFilters((prev) =>
-                    prev.filter((f) => f.id !== 'status'),
-                  );
+                  setColumnFilters(prev => prev.filter(f => f.id !== 'status'));
                 }}
               >
                 All
               </DropdownMenuCheckboxItem>
               <DropdownMenuCheckboxItem
                 checked={columnFilters.some(
-                  (f) => f.id === 'status' && f.value === 'ACTIVE',
+                  f => f.id === 'status' && f.value === 'ACTIVE'
                 )}
                 onCheckedChange={() => {
                   setColumnFilters([{ id: 'status', value: 'ACTIVE' }]);
@@ -176,7 +174,7 @@ export default function DataTable<TData, TValue>({
               </DropdownMenuCheckboxItem>
               <DropdownMenuCheckboxItem
                 checked={columnFilters.some(
-                  (f) => f.id === 'status' && f.value === 'INACTIVE',
+                  f => f.id === 'status' && f.value === 'INACTIVE'
                 )}
                 onCheckedChange={() => {
                   setColumnFilters([{ id: 'status', value: 'INACTIVE' }]);
@@ -194,15 +192,15 @@ export default function DataTable<TData, TValue>({
       <div className="rounded-md px-8s pb-3 border">
         <Table>
           <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
+            {table.getHeaderGroups().map(headerGroup => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
+                {headerGroup.headers.map(header => (
                   <TableHead key={header.id} colSpan={header.colSpan}>
                     {header.isPlaceholder
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext(),
+                          header.getContext()
                         )}
                   </TableHead>
                 ))}
@@ -212,16 +210,16 @@ export default function DataTable<TData, TValue>({
 
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+              table.getRowModel().rows.map(row => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
                 >
-                  {row.getVisibleCells().map((cell) => (
+                  {row.getVisibleCells().map(cell => (
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext(),
+                        cell.getContext()
                       )}
                     </TableCell>
                   ))}

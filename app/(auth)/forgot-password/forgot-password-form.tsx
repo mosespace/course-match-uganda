@@ -39,7 +39,7 @@ export default function ForgotPasswordForm() {
     // Start countdown timer (60 seconds)
     setResendTimer(60);
     const timer = setInterval(() => {
-      setResendTimer((prev) => {
+      setResendTimer(prev => {
         if (prev <= 1) {
           clearInterval(timer);
           setIsResending(false);
@@ -61,7 +61,7 @@ export default function ForgotPasswordForm() {
       }
       toast.success(
         'Successfully',
-        'Reset Instructions sent, Check your email',
+        'Reset Instructions sent, Check your email'
       );
       setLoading(false);
       setEmail(data.email);

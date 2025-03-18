@@ -106,7 +106,7 @@ export function ProfileForm({ user }: { user: any }) {
       if (result.success) {
         toast.success(
           'Profile updated',
-          'Your profile has been updated successfully.',
+          'Your profile has been updated successfully.'
         );
       } else {
         throw new Error(result.error || 'Failed to update profile');
@@ -124,7 +124,7 @@ export function ProfileForm({ user }: { user: any }) {
     if (user) {
       if (user.maritalStatus) {
         const matchedType = statuses.find(
-          (opt) => opt.label === user.maritalStatus,
+          opt => opt.label === user.maritalStatus
         );
         if (matchedType) {
           setStatus(matchedType);
@@ -132,14 +132,14 @@ export function ProfileForm({ user }: { user: any }) {
       }
       if (user.bloodGroup) {
         const matchedType = blood_groups.find(
-          (opt) => opt.value === user.bloodGroup,
+          opt => opt.value === user.bloodGroup
         );
         if (matchedType) {
           setBloodGroup(matchedType);
         }
       }
       if (user.gender) {
-        const matchedType = genders.find((opt) => opt.label === user.gender);
+        const matchedType = genders.find(opt => opt.label === user.gender);
         if (matchedType) {
           setGender(matchedType);
         }
@@ -250,7 +250,7 @@ export function ProfileForm({ user }: { user: any }) {
               </h2>
               <Select
                 value={gender}
-                onChange={(option) => setGender(option as Option)}
+                onChange={option => setGender(option as Option)}
                 options={genders}
                 isClearable={true}
                 primaryColor="emerald"
@@ -265,7 +265,7 @@ export function ProfileForm({ user }: { user: any }) {
               </h2>
               <Select
                 value={status}
-                onChange={(option) => setStatus(option as Option)}
+                onChange={option => setStatus(option as Option)}
                 options={statuses}
                 isClearable={true}
                 primaryColor="emerald"
@@ -288,7 +288,7 @@ export function ProfileForm({ user }: { user: any }) {
               </h2>
               <Select
                 value={bloodGroup}
-                onChange={(option) => setBloodGroup(option as Option)}
+                onChange={option => setBloodGroup(option as Option)}
                 options={blood_groups}
                 isClearable={true}
                 primaryColor="emerald"

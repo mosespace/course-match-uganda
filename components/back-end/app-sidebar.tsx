@@ -134,7 +134,7 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
       </SidebarHeader>
       <SidebarContent>
         <nav className={cn('flex space-y-1 lg:space-y-2 flex-col')} {...props}>
-          {data.map((item) => {
+          {data.map(item => {
             const segments = pathname.split('/dashboard').filter(Boolean);
 
             // Skip rendering if user's role is not in item's roles
@@ -162,7 +162,7 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
                   isActive(item.href)
                     ? 'bg-muted rounded-none hover:bg-muted'
                     : 'hover:bg-transparent hover:underline',
-                  'justify-start gap-2',
+                  'justify-start gap-2'
                 )}
               >
                 <item.icon className="h-4 w-4" />

@@ -43,7 +43,7 @@ const RetroGrid = ({
     <div
       className={cn(
         'pointer-events-none absolute size-full overflow-hidden [perspective:200px]',
-        `opacity-[var(--opacity)]`,
+        `opacity-[var(--opacity)]`
       )}
       style={gridStyles}
     >
@@ -74,7 +74,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
       gridOptions,
       ...props
     },
-    ref,
+    ref
   ) => {
     return (
       <div className={cn('relative', className)} ref={ref} {...props}>
@@ -128,7 +128,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
         </section>
       </div>
     );
-  },
+  }
 );
 HeroSection.displayName = 'HeroSection';
 

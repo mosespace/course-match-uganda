@@ -61,15 +61,15 @@ export default function FormSelectInput({
 
     if (Array.isArray(selectedOption)) {
       const hasSelectAll = selectedOption.some(
-        (item) => item.value === 'select-all',
+        item => item.value === 'select-all'
       );
       const hasDeselectAll = selectedOption.some(
-        (item) => item.value === 'deselect-all',
+        item => item.value === 'deselect-all'
       );
 
       if (hasSelectAll) {
         const validOptions = options.filter(
-          (opt): opt is Option => 'value' in opt,
+          (opt): opt is Option => 'value' in opt
         );
         setOption(validOptions);
       } else if (hasDeselectAll) {
@@ -133,7 +133,7 @@ export default function FormSelectInput({
           value={option}
           isMultiple={isMultiple}
           isSearchable={isSearchable}
-          onChange={(item) => handleSelectAll(item)}
+          onChange={item => handleSelectAll(item)}
           options={enhancedOptions}
           placeholder={label}
         />

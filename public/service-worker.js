@@ -1,6 +1,6 @@
 // Service Worker for Push Notifications
 
-self.addEventListener('push', (event) => {
+self.addEventListener('push', event => {
   if (event.data) {
     const data = event.data.json();
 
@@ -17,7 +17,7 @@ self.addEventListener('push', (event) => {
   }
 });
 
-self.addEventListener('notificationclick', (event) => {
+self.addEventListener('notificationclick', event => {
   event.notification.close();
 
   const notificationData = event.notification.data;
@@ -33,7 +33,7 @@ self.addEventListener('notificationclick', (event) => {
   }
 
   event.waitUntil(
-    clients.matchAll({ type: 'window' }).then((clientList) => {
+    clients.matchAll({ type: 'window' }).then(clientList => {
       // If a window client is already open, focus it
       for (const client of clientList) {
         if (client.url === url && 'focus' in client) {
@@ -45,6 +45,6 @@ self.addEventListener('notificationclick', (event) => {
       if (clients.openWindow) {
         return clients.openWindow(url);
       }
-    }),
+    })
   );
 });

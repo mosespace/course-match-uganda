@@ -42,7 +42,7 @@ const TimePickerInput = React.forwardRef<
       onRightFocus,
       ...props
     },
-    ref,
+    ref
   ) => {
     const [flag, setFlag] = React.useState<boolean>(false);
     const [prevIntKey, setPrevIntKey] = React.useState<string>('0');
@@ -95,7 +95,7 @@ const TimePickerInput = React.forwardRef<
 
         const newValue = calculateNewValue(e.key);
         if (flag) onRightFocus?.();
-        setFlag((prev) => !prev);
+        setFlag(prev => !prev);
         const tempDate = new Date(date);
         setDate(setDateByType(tempDate, newValue, picker, period));
       }
@@ -108,23 +108,23 @@ const TimePickerInput = React.forwardRef<
         name={name || picker}
         className={cn(
           'w-[48px] text-center font-mono text-base tabular-nums caret-transparent focus:bg-accent focus:text-accent-foreground [&::-webkit-inner-spin-button]:appearance-none',
-          className,
+          className
         )}
         value={value || calculatedValue}
-        onChange={(e) => {
+        onChange={e => {
           e.preventDefault();
           onChange?.(e);
         }}
         type={type}
         inputMode="decimal"
-        onKeyDown={(e) => {
+        onKeyDown={e => {
           onKeyDown?.(e);
           handleKeyDown(e);
         }}
         {...props}
       />
     );
-  },
+  }
 );
 
 TimePickerInput.displayName = 'TimePickerInput';

@@ -47,8 +47,8 @@ export const TimePeriodSelect = React.forwardRef<
           tempDate,
           hours.toString(),
           '12hours',
-          period === 'AM' ? 'PM' : 'AM',
-        ),
+          period === 'AM' ? 'PM' : 'AM'
+        )
       );
     }
   };

@@ -1,14 +1,20 @@
-import type React from "react"
+import type React from 'react';
 
 interface SocialIconProps {
-  href: string
-  "aria-label": string
-  icon: React.ReactNode
-  target?: string
-  rel?: string
+  href: string;
+  'aria-label': string;
+  icon: React.ReactNode;
+  target?: string;
+  rel?: string;
 }
 
-export function SocialIcon({ href, "aria-label": ariaLabel, icon, target, rel }: SocialIconProps) {
+export function SocialIcon({
+  href,
+  'aria-label': ariaLabel,
+  icon,
+  target,
+  rel,
+}: SocialIconProps) {
   return (
     <a
       href={href}
@@ -19,6 +25,5 @@ export function SocialIcon({ href, "aria-label": ariaLabel, icon, target, rel }:
     >
       {icon}
     </a>
-  )
+  );
 }
-

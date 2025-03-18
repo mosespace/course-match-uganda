@@ -40,7 +40,7 @@ export default function CustomTextArea({
           rows={height} // Use the height prop here
           className={cn(
             'block w-full border-brandBlack',
-            errors[`${name}`] && 'focus:ring-red-500',
+            errors[`${name}`] && 'focus:ring-red-500'
           )}
           placeholder={placeholder}
         />

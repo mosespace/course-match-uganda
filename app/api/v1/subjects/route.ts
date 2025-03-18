@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     // Delete existing courses first
 
     // Ensure all courses have required fields and fill in defaults where necessary
-    const subjectToCreate = subjects.map((subject) => ({
+    const subjectToCreate = subjects.map(subject => ({
       name: subject.name,
       code: subject.code,
       description: subject.description || null,

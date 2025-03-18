@@ -18,7 +18,7 @@ export function formatDate(date: Date): string {
 
 export function calculateHoursDifference(
   startTime: Date | null,
-  endTime: Date | null,
+  endTime: Date | null
 ): string {
   if (!startTime || !endTime) return '--';
 

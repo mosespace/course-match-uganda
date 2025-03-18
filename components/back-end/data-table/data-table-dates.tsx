@@ -169,7 +169,7 @@ export default function DateFilters({
             animate-dropdown-open
           "
         >
-          {options.map((option) => (
+          {options.map(option => (
             <button
               key={option.value}
               type="button"

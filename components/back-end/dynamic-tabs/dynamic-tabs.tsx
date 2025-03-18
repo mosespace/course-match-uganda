@@ -30,7 +30,7 @@ export default function DynamicTabs({
       className="w-full"
     >
       <TabsList className="w-full justify-start rounded-none border-b bg-transparent p-0">
-        {data.map((tab) => (
+        {data.map(tab => (
           <TabsTrigger
             key={tab.id}
             value={tab.id}
@@ -42,7 +42,7 @@ export default function DynamicTabs({
       </TabsList>
 
       <div className="mt-6">
-        {data.map((tab) => (
+        {data.map(tab => (
           <TabsContent key={tab.id} value={tab.id}>
             <tab.Component isEditing={isEditing} data={tab} />
           </TabsContent>

@@ -60,12 +60,12 @@ export function StatusCell({
       <Select
         disabled={isPending}
         value={status}
-        onValueChange={(value) => handleStatusChange(value as any)}
+        onValueChange={value => handleStatusChange(value as any)}
       >
         <SelectTrigger
           className={cn(
             'w-[140px] justify-center rounded-none font-semibold',
-            statusStyles[status],
+            statusStyles[status]
           )}
         >
           <SelectValue>{isPending ? 'Updating...' : status}</SelectValue>

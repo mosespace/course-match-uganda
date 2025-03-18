@@ -36,7 +36,7 @@ const TagInput: React.FC<TagInputProps> = ({
     if (initialValue) {
       const initialTags = initialValue
         .split(',')
-        .map((tag) => tag.trim())
+        .map(tag => tag.trim())
         .filter(Boolean);
       setTags(initialTags);
     }
@@ -76,13 +76,13 @@ const TagInput: React.FC<TagInputProps> = ({
   const addTag = (): void => {
     const trimmedValue = inputValue.trim();
     if (validateTag(trimmedValue)) {
-      setTags((prev) => [...prev, trimmedValue]);
+      setTags(prev => [...prev, trimmedValue]);
       setInputValue('');
     }
   };
 
   const removeTag = (tagToRemove: string): void => {
-    setTags((prev) => prev.filter((tag) => tag !== tagToRemove));
+    setTags(prev => prev.filter(tag => tag !== tagToRemove));
     setError(null);
   };
 

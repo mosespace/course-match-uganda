@@ -76,7 +76,7 @@ export default function OnboardingForm({ userId }: OnboardingFormProps) {
 
   const handleDepartmentChange = (option: Option | Option[] | null) => {
     if (!option || Array.isArray(option)) return;
-    const department = departments.find((d) => d.value === option.value);
+    const department = departments.find(d => d.value === option.value);
     if (!department) return;
     setSelectedDepartment(department);
   };
@@ -98,13 +98,13 @@ export default function OnboardingForm({ userId }: OnboardingFormProps) {
       if (result.success) {
         toast.success(
           'Profile updated!',
-          'Your company profile has been updated successfully.',
+          'Your company profile has been updated successfully.'
         );
         router.push('/dashboard');
       } else {
         toast.error(
           'Error',
-          result.error || 'Something went wrong. Please try again.',
+          result.error || 'Something went wrong. Please try again.'
         );
       }
     } catch (error) {
@@ -179,7 +179,7 @@ export default function OnboardingForm({ userId }: OnboardingFormProps) {
           </h2>
           <Select
             value={department}
-            onChange={(option) => {
+            onChange={option => {
               setDepartment(option as Option);
               handleDepartmentChange(option);
             }}

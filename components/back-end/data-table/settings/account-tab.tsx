@@ -24,7 +24,7 @@ import { Info } from 'lucide-react';
 
 export function AccountTab() {
   const [profileImage, setProfileImage] = useState(
-    '/placeholder.svg?height=100&width=100',
+    '/placeholder.svg?height=100&width=100'
   );
 
   return (

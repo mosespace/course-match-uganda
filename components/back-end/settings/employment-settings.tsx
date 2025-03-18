@@ -41,7 +41,7 @@ export function EmploymentSettings({ user }: { user: any }) {
     return type
       .replace('_', ' ')
       .toLowerCase()
-      .replace(/\b\w/g, (l) => l.toUpperCase());
+      .replace(/\b\w/g, l => l.toUpperCase());
   };
 
   // Format department for display
@@ -50,7 +50,7 @@ export function EmploymentSettings({ user }: { user: any }) {
     return department
       .replace('_', ' ')
       .toLowerCase()
-      .replace(/\b\w/g, (l) => l.toUpperCase());
+      .replace(/\b\w/g, l => l.toUpperCase());
   };
 
   return (

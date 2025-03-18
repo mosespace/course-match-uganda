@@ -6,7 +6,7 @@ export function getNormalDate(inputDate: Date): string {
     year: 'numeric',
   };
   const formattedDate = new Intl.DateTimeFormat('en-US', options).format(
-    inputDate,
+    inputDate
   );
 
   // Add ordinal suffix to the day

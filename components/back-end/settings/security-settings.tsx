@@ -41,7 +41,7 @@ const passwordFormSchema = z
       message: 'Confirm password must be at least 8 characters.',
     }),
   })
-  .refine((data) => data.newPassword === data.confirmPassword, {
+  .refine(data => data.newPassword === data.confirmPassword, {
     message: 'Passwords do not match',
     path: ['confirmPassword'],
   });
@@ -61,7 +61,7 @@ export function SecuritySettings() {
   });
 
   async function onSubmitPasswordForm(
-    values: z.infer<typeof passwordFormSchema>,
+    values: z.infer<typeof passwordFormSchema>
   ) {
     setIsLoading(true);
     try {

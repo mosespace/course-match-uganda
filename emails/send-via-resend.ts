@@ -20,7 +20,7 @@ export const sendEmailViaResend = async ({
 }) => {
   if (!resend) {
     console.info(
-      'RESEND_API_KEY is not set in the .env. Skipping sending email...',
+      'RESEND_API_KEY is not set in the .env. Skipping sending email...'
     );
     return;
   }

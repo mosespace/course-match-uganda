@@ -24,7 +24,7 @@ const deepSearch = (obj: any, searchTerm: string): boolean => {
 
   // Recursive case for objects and arrays
   if (typeof obj === 'object') {
-    return Object.values(obj).some((value) => deepSearch(value, term));
+    return Object.values(obj).some(value => deepSearch(value, term));
   }
 
   return false;
@@ -54,7 +54,7 @@ export default function SearchBar({
     const filteredData = data.filter((item: any) => {
       // If searchKeys are provided, only search in specified keys
       if (searchKeys && searchKeys.length > 0) {
-        return searchKeys.some((key) => {
+        return searchKeys.some(key => {
           const fieldValue = item[key];
           // Pass the search term, not the field value as the search term
           return fieldValue && deepSearch(fieldValue, value);
