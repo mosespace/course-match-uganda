@@ -1,0 +1,340 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Space+Grotesk:wght@300..700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --app-font: 'Space Grotesk', serif;
+}
+
+body {
+  font-family: var(--app-font) !important;
+}
+/* Color Used: #226F54 */
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 157.5 57.14% 2.75%;
+
+    --primary: 158.96 53.1% 28.43%;
+    --primary-foreground: 157.5 22.22% 92.94%;
+
+    --card: 150 22.22% 96.47%;
+    --card-foreground: 157.5 57.14% 2.75%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 157.5 57.14% 2.75%;
+
+    --secondary: 158.18 20% 89.22%;
+    --secondary-foreground: 0 0% 0%;
+
+    --muted: 157.5 22.22% 92.94%;
+    --muted-foreground: 0 0% 40%;
+
+    --accent: 157.5 22.22% 92.94%;
+    --accent-foreground: 160 54.55% 4.31%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 160 20.55% 85.69%;
+    --input: 160 8.26% 78.63%;
+    --ring: 158.96 53.1% 28.43%;
+
+    --chart-1: 158.96 53.1% 28.43%;
+    --chart-2: 159.09 33% 39.22%;
+    --chart-3: 159.6 21.01% 53.33%;
+    --chart-4: 159.07 21.39% 60.59%;
+    --chart-5: 158.82 20.73% 67.84%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+  .dark {
+    --background: 0 0% 0%;
+    --foreground: 158.18 20% 89.22%;
+
+    --primary: 158.96 53.1% 28.43%;
+    --primary-foreground: 157.5 22.22% 92.94%;
+
+    --card: 160 12% 4.9%;
+    --card-foreground: 158.18 20% 89.22%;
+
+    --popover: 0 0% 0%;
+    --popover-foreground: 158.18 20% 89.22%;
+
+    --secondary: 157.78 52.94% 10%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 0 0% 9.8%;
+    --muted-foreground: 0 0% 50.2%;
+
+    --accent: 157.78 52.94% 10%;
+    --accent-foreground: 158.18 20% 89.22%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 160 51.72% 5.69%;
+    --input: 162.86 7.69% 17.84%;
+    --ring: 158.96 53.1% 28.43%;
+
+    --chart-1: 158.96 53.1% 28.43%;
+    --chart-2: 158.77 52.85% 24.12%;
+    --chart-3: 159.6 53.19% 18.43%;
+    --chart-4: 158.57 52.5% 15.69%;
+    --chart-5: 159.43 53.85% 12.75%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 240 5.9% 10%;
+
+    --sidebar-foreground: 240 4.8% 95.9%;
+
+    --sidebar-primary: 224.3 76.3% 48%;
+
+    --sidebar-primary-foreground: 0 0% 100%;
+
+    --sidebar-accent: 240 3.7% 15.9%;
+
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+
+    --sidebar-border: 240 3.7% 15.9%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Loader */
+.spinner {
+  font-size: 28px;
+  position: relative;
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+}
+
+.spinner.center {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+.spinner .spinner-blade {
+  position: absolute;
+  left: 0.4629em;
+  bottom: 0;
+  width: 0.074em;
+  height: 0.2777em;
+  border-radius: 0.0555em;
+  background-color: transparent;
+  -webkit-transform-origin: center -0.2222em;
+  -ms-transform-origin: center -0.2222em;
+  transform-origin: center -0.2222em;
+  animation: spinner-fade9234 1s infinite linear;
+}
+
+.spinner .spinner-blade:nth-child(1) {
+  -webkit-animation-delay: 0s;
+  animation-delay: 0s;
+  -webkit-transform: rotate(0deg);
+  -ms-transform: rotate(0deg);
+  transform: rotate(0deg);
+}
+
+.spinner .spinner-blade:nth-child(2) {
+  -webkit-animation-delay: 0.083s;
+  animation-delay: 0.083s;
+  -webkit-transform: rotate(30deg);
+  -ms-transform: rotate(30deg);
+  transform: rotate(30deg);
+}
+
+.spinner .spinner-blade:nth-child(3) {
+  -webkit-animation-delay: 0.166s;
+  animation-delay: 0.166s;
+  -webkit-transform: rotate(60deg);
+  -ms-transform: rotate(60deg);
+  transform: rotate(60deg);
+}
+
+.spinner .spinner-blade:nth-child(4) {
+  -webkit-animation-delay: 0.249s;
+  animation-delay: 0.249s;
+  -webkit-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+
+.spinner .spinner-blade:nth-child(5) {
+  -webkit-animation-delay: 0.332s;
+  animation-delay: 0.332s;
+  -webkit-transform: rotate(120deg);
+  -ms-transform: rotate(120deg);
+  transform: rotate(120deg);
+}
+
+.spinner .spinner-blade:nth-child(6) {
+  -webkit-animation-delay: 0.415s;
+  animation-delay: 0.415s;
+  -webkit-transform: rotate(150deg);
+  -ms-transform: rotate(150deg);
+  transform: rotate(150deg);
+}
+
+.spinner .spinner-blade:nth-child(7) {
+  -webkit-animation-delay: 0.498s;
+  animation-delay: 0.498s;
+  -webkit-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+
+.spinner .spinner-blade:nth-child(8) {
+  -webkit-animation-delay: 0.581s;
+  animation-delay: 0.581s;
+  -webkit-transform: rotate(210deg);
+  -ms-transform: rotate(210deg);
+  transform: rotate(210deg);
+}
+
+.spinner .spinner-blade:nth-child(9) {
+  -webkit-animation-delay: 0.664s;
+  animation-delay: 0.664s;
+  -webkit-transform: rotate(240deg);
+  -ms-transform: rotate(240deg);
+  transform: rotate(240deg);
+}
+
+.spinner .spinner-blade:nth-child(10) {
+  -webkit-animation-delay: 0.747s;
+  animation-delay: 0.747s;
+  -webkit-transform: rotate(270deg);
+  -ms-transform: rotate(270deg);
+  transform: rotate(270deg);
+}
+
+.spinner .spinner-blade:nth-child(11) {
+  -webkit-animation-delay: 0.83s;
+  animation-delay: 0.83s;
+  -webkit-transform: rotate(300deg);
+  -ms-transform: rotate(300deg);
+  transform: rotate(300deg);
+}
+
+.spinner .spinner-blade:nth-child(12) {
+  -webkit-animation-delay: 0.913s;
+  animation-delay: 0.913s;
+  -webkit-transform: rotate(330deg);
+  -ms-transform: rotate(330deg);
+  transform: rotate(330deg);
+}
+
+@keyframes spinner-fade9234 {
+  0% {
+    background-color: #69717d;
+  }
+
+  100% {
+    background-color: transparent;
+  }
+}
+
+/* Custom styles for the table */
+.table {
+  @apply w-full text-sm;
+}
+
+.table thead tr:first-child th {
+  @apply text-center font-semibold py-4;
+}
+
+.table thead tr:last-child th {
+  @apply border-b;
+}
+
+/* Column group colors */
+.table th[data-column-group='Earnings'],
+.table td[data-column-group='Earnings'] {
+  @apply bg-[#e3f2fd]/40;
+}
+
+.table th[data-column-group='Reimbursement'],
+.table td[data-column-group='Reimbursement'] {
+  @apply bg-[#f3e5f5]/40;
+}
+
+.table th[data-column-group='Addition'],
+.table td[data-column-group='Addition'] {
+  @apply bg-[#fff3e0]/40;
+}
+
+/* Row states */
+.table tbody tr:hover {
+  @apply bg-gray-50;
+}
+
+.table tbody tr[data-state='selected'] {
+  @apply bg-blue-50;
+}
+
+.table tbody tr[data-state='selected']:hover {
+  @apply bg-blue-100;
+}
+
+.table tbody tr[data-state='selected'] td {
+  @apply bg-opacity-50;
+}
+
+/* Cell spacing */
+.table td {
+  @apply py-3;
+}
+
+/* Edit mode inputs */
+.table input {
+  @apply bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500;
+}
+
+/* Ensure header colors are more prominent than cell colors */
+.table thead th {
+  @apply bg-opacity-100;
+}
+
+/* Ensure selected state shows through column colors */
+.table tbody tr[data-state='selected'] td {
+  @apply relative;
+}
+
+.table tbody tr[data-state='selected'] td::after {
+  content: '';
+  @apply absolute inset-0 bg-blue-50 opacity-50 pointer-events-none;
+}

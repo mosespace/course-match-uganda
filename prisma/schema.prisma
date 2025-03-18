@@ -1,0 +1,329 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  STUDENT
+  DEVELOPER
+  ADMIN
+}
+
+enum CourseLevel {
+  CERTIFICATE
+  DIPLOMA
+  BACHELORS
+  MASTERS
+  PHD
+}
+
+enum UniversityStatus {
+  PUBLIC
+  PRIVATE
+}
+
+model User {
+  id                   String    @id @default(cuid())
+  name                 String
+  email                String    @unique
+  emailVerified        DateTime?
+  token                String?
+  image                String?
+  isMachine            Boolean   @default(false)
+  passwordHash         String?
+  invalidLoginAttempts Int       @default(0)
+  role                 Role      @default(STUDENT)
+  // System
+  lockedAt             DateTime?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt()
+  // isCampusModerator Boolean?  @default(false)
+
+  // Relations
+  feedbacks    Feedback[]
+  student      Student?
+  developer    Developer?
+  admin        Admin?
+  favorites    Favorite[]
+  // searchHistory     SearchHistory[]
+  accounts     Account[]
+  sessions     Session[]
+  activityLogs ActivityLog[] @relation("UserActivityLog")
+}
+
+model ActivityLog {
+  id          String   @id @default(cuid())
+  userId      String
+  action      String
+  description String?
+  details     Json?
+  createdAt   DateTime @default(now())
+
+  user User @relation("UserActivityLog", fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Account {
+  id                       String   @id @default(cuid())
+  userId                   String
+  type                     String
+  provider                 String
+  providerAccountId        String
+  refresh_token            String?
+  refresh_token_expires_in Int?
+  access_token             String?
+  expires_at               Int?
+  token_type               String?
+  scope                    String?
+  id_token                 String?
+  session_state            String?
+  createdAt                DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  createdAt    DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  id         String   @id @default(cuid())
+  identifier String
+  token      String   @unique
+  createdAt  DateTime @default(now())
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Feedback {
+  id        String   @id @default(cuid())
+  message   String?
+  user      User     @relation(fields: [userId], references: [id]) // Defining a many-to-one relationship
+  userId    String // Foreign key 
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @default(now()) @map(name: "updated_at")
+}
+
+// Student specific profile
+model Student {
+  id                String       @id @default(cuid())
+  userId            String       @unique
+  user              User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dateOfBirth       DateTime?
+  gender            String?
+  address           String?
+  schoolAttended    String?
+  completionYear    Int?
+  preferredCampuses University[]
+  subjectIds        String[]
+  
+  // Academic details
+  subjectCombinations SubjectCombination[]
+  // gradePoints         GradePoint[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Developer specific profile
+model Developer {
+  id           String   @id @default(cuid())
+  userId       String   @unique
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  companyName  String?
+  website      String?
+  apiKey       String   @unique
+  apiKeyExpiry DateTime
+  isApproved   Boolean  @default(false)
+
+  // API usage tracking
+  requestLogs ApiRequestLog[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Admin specific profile
+model Admin {
+  id          String @id @default(cuid())
+  userId      String @unique
+  user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  permissions Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// University University model
+model University {
+  id          String           @id @default(cuid())
+  slug        String           @unique
+  name        String
+  description String?
+  status      UniversityStatus @default(PUBLIC)
+  location    String?
+  website     String?
+  logo        String?          @default("https://1k60xyo2z1.ufs.sh/f/Guex3D2XmynflHpmmO9BbCEUzjguTyNW9iB7PtwY4XZVAxL5")
+
+  // Relations
+  courses  Course[]
+  students Student[] // Students who selected this university as preferred
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Course model
+model Course {
+  id                  String      @id @default(cuid())
+  name                String
+  code                String? // Course code like "MET", "DPP", etc.
+  slug                String      @unique
+  description         String?
+  keywords            String[]
+  duration            Int // In years
+  entryPoints         Int?
+  level               CourseLevel // Diploma, Bachelors, Masters, PhD
+  specialRequirements String? // Like "An applicant must have passed Biology at 'O' Level"
+
+  // Relations
+  universityId String
+  university   University @relation(fields: [universityId], references: [id])
+  // subjectRequirements CourseSubjectRequirement[]
+  favorites    Favorite[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Subject model
+model Subject {
+  id          String  @id @default(cuid())
+  name        String  @unique
+  code        String  @unique
+  description String?
+
+  // Relations
+  // subjectCombinations SubjectCombinationSubject[]
+  // gradePoints         GradePoint[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Subject Combinations
+model SubjectCombination {
+  id          String  @id @default(cuid())
+  name        String // e.g., "PCM" for Physics, Chemistry, Mathematics
+  description String?
+
+  // Relations
+  // subjects          SubjectCombinationSubject[]
+  // courses           CourseSubjectCombination[]
+  students Student[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// // Many-to-many relationship between SubjectCombination and Subject
+// model SubjectCombinationSubject {
+//   id                      String              @id @default(cuid())
+//   subjectCombinationId    String
+//   subjectId               String
+//   subjectCombination      SubjectCombination  @relation(fields: [subjectCombinationId], references: [id], onDelete: Cascade)
+//   subject                 Subject             @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+//   @@unique([subjectCombinationId, subjectId])
+// }
+
+// // Many-to-many relationship between Course and SubjectCombination
+// model CourseSubjectCombination {
+//   id                      String              @id @default(cuid())
+//   courseId                String
+//   subjectCombinationId    String
+//   course                  Course              @relation(fields: [courseId], references: [id], onDelete: Cascade)
+//   subjectCombination      SubjectCombination  @relation(fields: [subjectCombinationId], references: [id], onDelete: Cascade)
+
+//   @@unique([courseId, subjectCombinationId])
+// }
+
+// Student's grade points for subjects
+// model GradePoint {
+//   id                String         @id @default(cuid())
+//   studentId         String
+//   subjectId         String
+//   grade             String         // A, B, C, D, E, F, etc.
+//   points            Int            // Corresponding points for the grade
+
+//   // Relations
+//   student           Student        @relation(fields: [studentId], references: [id], onDelete: Cascade)
+//   subject           Subject        @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+//   createdAt         DateTime       @default(now())
+//   updatedAt         DateTime       @updatedAt
+
+//   @@unique([studentId, subjectId])
+// }
+
+// Student's favorite courses
+model Favorite {
+  id       String @id @default(cuid())
+  userId   String
+  courseId String
+
+  // Relations
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, courseId])
+}
+
+// Search history
+// model SearchHistory {
+//   id                String         @id @default(cuid())
+//   userId            String
+//   query             String
+//   filters           Json?
+
+//   // Relations
+//   user              User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+//   createdAt         DateTime       @default(now())
+// }
+
+// API request logs
+model ApiRequestLog {
+  id           String  @id @default(cuid())
+  developerId  String
+  endpoint     String
+  method       String
+  statusCode   Int
+  responseTime Int // In milliseconds
+  ipAddress    String?
+
+  // Relations
+  developer Developer @relation(fields: [developerId], references: [id], onDelete: Cascade)
+
+  timestamp DateTime @default(now())
+}
