@@ -1,16 +1,16 @@
-import { db } from '@/lib/db';
-import { UniversityStatus } from '@prisma/client';
-import { NextRequest, NextResponse } from 'next/server';
+import { db } from "@/lib/db";
+import { UniversityStatus } from "@prisma/client";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-  const apiKey = req.headers.get('x-api-key');
-  console.log('API KEY ✅:', apiKey);
+  const apiKey = req.headers.get("x-api-key");
+  console.log("API KEY ✅:", apiKey);
 
   try {
-    if (apiKey !== 'desishub-inc') {
+    if (apiKey !== "desishub-inc") {
       return NextResponse.json({
         data: null,
-        message: 'You are not authorized',
+        message: "You are not authorized",
         status: 401,
       });
     }
@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
     if (!Array.isArray(universities)) {
       return NextResponse.json({
         data: null,
-        message: 'Invalid request format. Expected array of universities.',
+        message: "Invalid request format. Expected array of universities.",
         status: 400,
       });
     }
@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
       status: UniversityStatus.PUBLIC,
       logo:
         university.logo ||
-        'https://1k60xyo2z1.ufs.sh/f/Guex3D2XmynflHpmmO9BbCEUzjguTyNW9iB7PtwY4XZVAxL5',
+        "https://1k60xyo2z1.ufs.sh/f/Guex3D2XmynflHpmmO9BbCEUzjguTyNW9iB7PtwY4XZVAxL5",
     }));
 
     // console.log('Universities to create ✅:', universitiesToCreate);
@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
     try {
       // Delete existing universities first
       await db.university.deleteMany();
-      console.log('Existing universities deleted....');
+      console.log("Existing universities deleted....");
 
       // Create all new universities
       const createdCampuses = await db.university.createMany({
@@ -54,50 +54,50 @@ export async function POST(req: NextRequest) {
 
       return NextResponse.json({
         data: createdCampuses,
-        message: 'Universities created successfully',
+        message: "Universities created successfully",
         status: 201,
       });
     } catch (dbError) {
-      console.error('Database operation failed:', dbError);
+      console.error("Database operation failed:", dbError);
       throw dbError; // Re-throw to be caught by outer try-catch
     }
   } catch (error) {
     return NextResponse.json({
       data: null,
       status: 500,
-      message: 'Failed to create university',
+      message: "Failed to create university",
     });
   }
 }
 
 export async function GET(req: NextRequest) {
-  const apiKey = req.headers.get('x-api-key');
+  const apiKey = req.headers.get("x-api-key");
 
   try {
-    if (apiKey !== 'desishub-inc') {
+    if (apiKey !== "desishub-inc") {
       return NextResponse.json({
         data: null,
-        message: 'You are not authorized',
+        message: "You are not authorized",
         status: 401,
       });
     }
 
     const universities = await db.university.findMany({
       orderBy: {
-        createdAt: 'desc',
+        createdAt: "desc",
       },
     });
 
     return NextResponse.json({
       data: universities,
       status: 200,
-      message: 'Universities featched back succesfully',
+      message: "Universities featched back succesfully",
     });
   } catch (error) {
     return NextResponse.json({
       data: null,
       status: 500,
-      message: 'Failed to create university',
+      message: "Failed to fetch university",
     });
   }
 }
