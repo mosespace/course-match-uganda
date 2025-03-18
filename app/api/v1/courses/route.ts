@@ -1,12 +1,15 @@
 import { db } from '@/lib/db';
 import { getUniversities } from '@/actions/universities';
 import { NextRequest, NextResponse } from 'next/server';
+import { generateCode } from '@/lib/generateCode';
+import { generateSlug } from '@/lib/generateSlug';
+import { CourseLevel } from '@prisma/client';
 
 export async function POST(req: NextRequest) {
   const apiKey = req.headers.get('x-api-key');
   // console.log('API KEY ✅:', apiKey);
 
-  // const universities = await getUniversities();
+  const universities = await getUniversities();
   // console.log('University IDs ✅:', universities);
 
   try {
@@ -29,22 +32,35 @@ export async function POST(req: NextRequest) {
       });
     }
     // Delete existing courses first
+    await db.course.deleteMany({});
 
     // Ensure all courses have required fields and fill in defaults where necessary
-    const courseToCreate = courses.map((course) => ({
-      name: course.name,
-      code: course.code,
-      slug: course.slug,
-      description: course.description || null,
-      keywords: course.keywords,
-      duration: course.duration,
-      entryPoints: parseInt(course.entryPoints),
-      level: course.level,
-      specialRequirements: course.specialRequirements,
-      universityId: course.universityId,
-    }));
+    const courseToCreate = courses.map((course) => {
+      // Find the matching university based on name
+      const university = universities?.find(
+        (uni) =>
+          uni.name.toLowerCase() === course.institutionName.toLowerCase(),
+      );
 
-    // console.log('Courses to create ✅:', courseToCreate);
+      const entryPoints = Math.floor(Math.random() * 20) + 1;
+      const duration = Math.floor(Math.random() * 3) + 1;
+
+      return {
+        name: course.name,
+        code: generateCode(course.name),
+        slug: generateSlug(course.name),
+        status:
+          course.status === 'Under Review' ? 'UnderReview' : course.status,
+        accreditedDate: new Date(course.accreditedDate),
+        expiryDate: new Date(course.expiryDate),
+        duration: duration,
+        entryPoints: entryPoints,
+        level: course.level || CourseLevel.CERTIFICATE,
+        universityId: university ? university.id : 'cm8ejj3as0011rx64sxbdnz8p',
+      };
+    });
+
+    // console.log('Courses to create ✅:', courseToCreate[0]);
     await db.course.deleteMany();
     console.log('Existing courses deleted....');
     // Create all new courses

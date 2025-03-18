@@ -7,6 +7,8 @@ export async function getUniversities() {
     const universities = await db.university.findMany({
       select: {
         id: true,
+        name: true,
+        slug: true,
       },
     });
 
