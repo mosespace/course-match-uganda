@@ -184,7 +184,6 @@ model University {
   name        String
   description String?
   status      UniversityStatus @default(Public)
-  location    String?
   district    String?
   website     String?
   logo        String?          @default("https://1k60xyo2z1.ufs.sh/f/Guex3D2XmynflHpmmO9BbCEUzjguTyNW9iB7PtwY4XZVAxL5")
