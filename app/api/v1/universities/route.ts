@@ -3,6 +3,7 @@ import { generateSlug } from '@/lib/generateSlug';
 import { UniversityStatus } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 
+// cretae university
 export async function POST(req: NextRequest) {
   const apiKey = req.headers.get('x-api-key');
   // console.log('API KEY ✅:', apiKey);
@@ -65,6 +66,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
+// get universities
 export async function GET(req: NextRequest) {
   const apiKey = req.headers.get('x-api-key');
 
@@ -97,6 +99,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
+// delete university
 export async function DELETE(req: NextRequest) {
   const apiKey = req.headers.get('x-api-key');
 
