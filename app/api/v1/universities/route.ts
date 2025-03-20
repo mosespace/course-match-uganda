@@ -1,6 +1,6 @@
 import { db } from '@/lib/db';
 import { generateSlug } from '@/lib/generateSlug';
-import { UniversityStatus } from '@prisma/client';
+import { Prisma, UniversityStatus } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 
 // cretae university
@@ -69,6 +69,14 @@ export async function POST(req: NextRequest) {
 // get universities
 export async function GET(req: NextRequest) {
   const apiKey = req.headers.get('x-api-key');
+  const { searchParams } = new URL(req.url);
+
+  // Pagination and filtering params
+  const page = parseInt(searchParams.get('page') || '1');
+  const limit = parseInt(searchParams.get('limit') || '4');
+  const search = searchParams.get('search') || '';
+  const district = searchParams.get('district') || '';
+  const status = searchParams.get('status') || '';
 
   try {
     if (apiKey !== 'desishub-inc') {
@@ -79,7 +87,28 @@ export async function GET(req: NextRequest) {
       });
     }
 
+    // Calculate skip value for pagination
+    const skip = (page - 1) * limit;
+    // Build where clause for filtering
+    const where: Prisma.UniversityWhereInput = {
+      ...(search && {
+        OR: [
+          { name: { contains: search, mode: 'insensitive' } },
+          { description: { contains: search, mode: 'insensitive' } },
+        ],
+      }),
+      ...(district && { district }),
+      ...(status && { status: status as UniversityStatus }),
+    };
+
+    // Get total count for pagination
+    const total = await db.university.count({ where });
+
+    // Get paginated results
     const universities = await db.university.findMany({
+      where,
+      skip,
+      take: limit,
       orderBy: {
         createdAt: 'desc',
       },
@@ -87,8 +116,16 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({
       data: universities,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+        hasNextPage: skip + universities.length < total,
+        hasPrevPage: page > 1,
+      },
       status: 200,
-      message: 'Universities featched back succesfully',
+      message: 'Universities fetched successfully',
     });
   } catch (error) {
     return NextResponse.json({
