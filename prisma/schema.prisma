@@ -16,6 +16,10 @@ enum Role {
   ADMIN
 }
 
+enum SubjectCategory {
+  SCIENCES
+  ARTS
+}
 enum CourseLevel {
   CERTIFICATE
   DIPLOMA
@@ -227,10 +231,7 @@ model Subject {
   name        String  @unique
   code        String  @unique
   description String?
-
-  // Relations
-  // subjectCombinations SubjectCombinationSubject[]
-  // gradePoints         GradePoint[]
+  category    SubjectCategory @default(SCIENCES) // e.g., "SCIENCE", "ARTS"
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

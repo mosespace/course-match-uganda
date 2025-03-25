@@ -68,10 +68,12 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
-  const apiKey = req.headers.get('x-api-key');
+  const header_api_key = req.headers.get('x-api-key');
+  // console.log('API KEY ✅:', apiKey);
+  const apiKey = process.env.API_KEY;
 
   try {
-    if (apiKey !== 'desishub-inc') {
+    if (header_api_key !== apiKey) {
       return NextResponse.json({
         data: null,
         message: 'You are not authorized to perform this action',
@@ -79,7 +81,27 @@ export async function GET(req: NextRequest) {
       });
     }
 
+    const { searchParams } = new URL(req.url);
+    const search = searchParams.get('search');
+    const page = Number.parseInt(searchParams.get('page') || '1');
+    const limit = Number.parseInt(searchParams.get('limit') || '10');
+    const skip = (page - 1) * limit;
+
+    const where: any = {};
+
+    if (search) {
+      where.OR = [
+        { name: { contains: search, mode: 'insensitive' } },
+        { code: { contains: search, mode: 'insensitive' } },
+      ];
+    }
+
+    const total = await db.course.count({ where });
+
     const courses = await db.course.findMany({
+      where,
+      skip,
+      take: limit,
       orderBy: {
         createdAt: 'desc',
       },
@@ -87,6 +109,12 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({
       data: courses,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
       status: 200,
       message: 'Courses featched back succesfully',
     });

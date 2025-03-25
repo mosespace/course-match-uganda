@@ -3,13 +3,14 @@ import { generateSlug } from '@/lib/generateSlug';
 import { Prisma, UniversityStatus } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 
-// cretae university
+// create university
 export async function POST(req: NextRequest) {
-  const apiKey = req.headers.get('x-api-key');
+  const header_api_key = req.headers.get('x-api-key');
   // console.log('API KEY ✅:', apiKey);
+  const apiKey = process.env.API_KEY;
 
   try {
-    if (apiKey !== 'desishub-inc') {
+    if (header_api_key !== apiKey) {
       return NextResponse.json({
         data: null,
         message: 'You are not authorized',

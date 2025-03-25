@@ -1,16 +1,14 @@
 import { db } from '@/lib/db';
-import { getUniversities } from '@/actions/universities';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
-  const apiKey = req.headers.get('x-api-key');
+  const header_api_key = req.headers.get('x-api-key');
   // console.log('API KEY ✅:', apiKey);
 
-  // const universities = await getUniversities();
-  // console.log('University IDs ✅:', universities);
+  const apiKey = process.env.API_KEY;
 
   try {
-    if (apiKey !== 'desishub-inc') {
+    if (header_api_key !== apiKey) {
       return NextResponse.json({
         data: null,
         message: 'You are not authorized',
@@ -28,12 +26,12 @@ export async function POST(req: NextRequest) {
         status: 400,
       });
     }
-    // Delete existing courses first
 
     // Ensure all courses have required fields and fill in defaults where necessary
-    const subjectToCreate = subjects.map(subject => ({
+    const subjectToCreate = subjects.map((subject) => ({
       name: subject.name,
       code: subject.code,
+       category: subject.category || null,
       description: subject.description || null,
     }));
 
@@ -72,16 +70,44 @@ export async function GET(req: NextRequest) {
       });
     }
 
+    const { searchParams } = new URL(req.url);
+    const search = searchParams.get('search');
+    const page = Number.parseInt(searchParams.get('page') || '1');
+    const limit = Number.parseInt(searchParams.get('limit') || '2');
+    const skip = (page - 1) * limit;
+
+    // Build the where clause based on filters
+    const where: any = {};
+
+    // Search by subject name or parent name/email
+    if (search) {
+      where.OR = [
+        { name: { contains: search, mode: 'insensitive' } },
+        { code: { contains: search, mode: 'insensitive' } },
+        { description: { contains: search, mode: 'insensitive' } },
+      ];
+    }
+
+    // Get total count for pagination
+    const total = await db.subject.count({ where });
+
     const courses = await db.subject.findMany({
-      orderBy: {
-        createdAt: 'desc',
-      },
+      where,
+      orderBy: { createdAt: 'desc' },
+      skip,
+      take: limit,
     });
 
     return NextResponse.json({
       data: courses,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
       status: 200,
-      message: 'Subjects featched back succesfully',
+      message: 'Subjects fetched back successfully',
     });
   } catch (error) {
     return NextResponse.json({
