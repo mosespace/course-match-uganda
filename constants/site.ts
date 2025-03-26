@@ -1,7 +1,7 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: 'EPMS System',
+  name: 'CM-UGANDA',
   description:
     'Efficiently manage employees, track projects, and boost productivity with our comprehensive project management solution.',
   logo: '/logo.svg',
