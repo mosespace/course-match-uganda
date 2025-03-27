@@ -5,7 +5,7 @@ import { AnimatedTooltip } from '@/components/ui/animated-tooltip';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { siteConfig } from '@/constants/site';
-import { Clock, DollarSign, GitGraph, Users } from 'lucide-react';
+import { Clock, DollarSign, GitGraph } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 

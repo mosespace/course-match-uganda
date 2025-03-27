@@ -3,10 +3,13 @@ import { siteConfig } from '@/constants/site';
 import { GitHubLogoIcon, TwitterLogoIcon } from '@radix-ui/react-icons';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { Button } from './ui/button';
 
 export const Header = () => {
   const pathname = usePathname();
   const isRoot = pathname === '/';
+
+  const isStart = pathname === '/start';
 
   return (
     <>
@@ -18,7 +21,7 @@ export const Header = () => {
         <Link href="/">
           <div className="text-xl text-gray-50">{siteConfig.name}</div>
         </Link>
-        <nav className="flex gap-6">
+        <nav className="flex items-center gap-6">
           <a
             href="https://twitter.com/bantu_creative"
             target="_blank"
@@ -35,6 +38,17 @@ export const Header = () => {
           >
             <GitHubLogoIcon className="h-6 w-6 text-gray-50 transition-colors hover:text-gray-400" />
           </a>
+          {!isStart && (
+            <Button asChild>
+              <a
+                href="/start"
+                rel="noopener noreferrer"
+                className="inline-flex"
+              >
+                Start Now!
+              </a>
+            </Button>
+          )}
         </nav>
       </header>
     </>
