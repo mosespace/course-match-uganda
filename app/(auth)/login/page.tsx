@@ -48,9 +48,9 @@ export default function LoginForm() {
 
   const handleGoogleSignIn = async () => {
     try {
-      setState(prev => ({ ...prev, isLoading: true, error: null }));
+      setState((prev) => ({ ...prev, isLoading: true, error: null }));
       const callbackUrl = validateCallbackUrl(
-        window.location.search?.split('callbackUrl=')[1]
+        window.location.search?.split('callbackUrl=')[1],
       );
 
       const result = await signIn('google', {
@@ -59,7 +59,7 @@ export default function LoginForm() {
       });
 
       if (result?.error === 'OAuthAccountNotLinked') {
-        setState(prev => ({
+        setState((prev) => ({
           ...prev,
           error:
             'An account already exists with your email address. Please sign in with your original authentication method.',
@@ -73,7 +73,7 @@ export default function LoginForm() {
         router.push(callbackUrl);
       }
     } catch (error) {
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
         error: 'Failed to sign in with Google. Please try again.',
         isLoading: false,
@@ -85,7 +85,7 @@ export default function LoginForm() {
     e.preventDefault();
 
     if (!state.email || !state.password) {
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
         error: 'Please fill in all fields',
       }));
@@ -93,7 +93,7 @@ export default function LoginForm() {
     }
 
     try {
-      setState(prev => ({ ...prev, isLoading: true, error: null }));
+      setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
       const result = await signIn('credentials', {
         redirect: false,
@@ -106,7 +106,7 @@ export default function LoginForm() {
       }
 
       const callbackUrl = validateCallbackUrl(
-        window.location.search?.split('callbackUrl=')[1]
+        window.location.search?.split('callbackUrl=')[1],
       );
 
       if (result?.ok && !result?.error) {
@@ -123,14 +123,14 @@ export default function LoginForm() {
         toast.success('Success', `Login successful, you're being redirected`);
         router.push(callbackUrl);
       } else {
-        setState(prev => ({
+        setState((prev) => ({
           ...prev,
           isLoading: false,
           error: result?.error || 'Authentication failed',
         }));
       }
     } catch (error) {
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
         error: 'Invalid email or password',
         isLoading: false,
@@ -139,7 +139,7 @@ export default function LoginForm() {
   };
 
   const togglePassword = () => {
-    setState(prev => ({ ...prev, showPassword: !prev.showPassword }));
+    setState((prev) => ({ ...prev, showPassword: !prev.showPassword }));
   };
 
   // Handle OAuth error parameters first (always execute this effect)
@@ -148,7 +148,7 @@ export default function LoginForm() {
     const errorParam = urlParams.get('error');
 
     if (errorParam === 'OAuthAccountNotLinked') {
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
         error:
           'An account already exists with your email address. Please sign in with your another method or google account instead.',
@@ -167,7 +167,7 @@ export default function LoginForm() {
     <div
       className="min-h-screen flex flex-col items-center justify-center p-4 relative bg-gradient-to-b from-black/60 to-black/60 bg-cover"
       style={{
-        backgroundImage: "url('/background.png')",
+        backgroundImage: "url('/login-bg.jpg')",
         backgroundSize: 'cover',
       }}
     >
@@ -256,8 +256,8 @@ export default function LoginForm() {
                 id="email"
                 type="email"
                 value={state.email}
-                onChange={e =>
-                  setState(prev => ({ ...prev, email: e.target.value }))
+                onChange={(e) =>
+                  setState((prev) => ({ ...prev, email: e.target.value }))
                 }
                 placeholder="john.doe@example.com"
                 className="h-[45px] bg-transparent border-[#262626] text-white placeholder:text-[#525252]"
@@ -285,8 +285,8 @@ export default function LoginForm() {
                   id="password"
                   type={state.showPassword ? 'text' : 'password'}
                   value={state.password}
-                  onChange={e =>
-                    setState(prev => ({ ...prev, password: e.target.value }))
+                  onChange={(e) =>
+                    setState((prev) => ({ ...prev, password: e.target.value }))
                   }
                   className="h-[45px] bg-transparent border-[#262626] text-white pr-10"
                   disabled={state.isLoading}
