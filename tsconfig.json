@@ -27,7 +27,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "cleanFirestoreDump.js"
+    "scripts/cleanFirestoreDump.js"
   ],
   "exclude": ["node_modules"]
 }
