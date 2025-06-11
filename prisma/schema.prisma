@@ -178,7 +178,6 @@ model Course {
   expiryDate       DateTime?
   requiredSubjects Subject[]     @relation("CourseRequiredSubjects")
   duration         Int?
-  entryPoints      Int?
   level            CourseLevel?  @default(CERTIFICATE)
 
   // Relations

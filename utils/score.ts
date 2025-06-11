@@ -79,3 +79,5 @@ const calculateCourseScore = (
 
   return total;
 };
+
+export { calculateCourseScore };
