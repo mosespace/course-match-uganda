@@ -160,6 +160,7 @@ export default function LoginForm() {
   React.useEffect(() => {
     if (session && status === 'authenticated') {
       router.push('/start');
+      return;
     }
   }, [session, status, router]);
 
