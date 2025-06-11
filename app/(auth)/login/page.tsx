@@ -33,16 +33,16 @@ export default function LoginForm() {
   });
 
   const validateCallbackUrl = (url: string | undefined): string => {
-    if (!url) return '/dashboard';
+    if (!url) return '/start';
     try {
       const urlObject = new URL(url, window.location.origin);
       const allowedDomains = [window.location.origin];
       if (!allowedDomains.includes(urlObject.origin)) {
-        return '/dashboard';
+        return '/start';
       }
       return urlObject.pathname + urlObject.search;
     } catch {
-      return '/dashboard';
+      return '/start';
     }
   };
 
@@ -159,7 +159,7 @@ export default function LoginForm() {
   // This needs to be a separate effect
   React.useEffect(() => {
     if (session && status === 'authenticated') {
-      router.push('/dashboard');
+      router.push('/start');
     }
   }, [session, status, router]);
 

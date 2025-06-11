@@ -7,7 +7,8 @@ import ForgotPasswordForm from './forgot-password-form';
 export default async function page() {
   const session = await getServerSession(authOptions);
   if (session) {
-    redirect('/dashboard');
+    redirect('/start');
+    return;
   }
   return (
     <div className="px-4">
