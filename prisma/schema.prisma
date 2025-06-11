@@ -204,6 +204,7 @@ model University {
 model Course {
   id             String        @id @default(cuid())
   name           String
+  description    String?
   code           String? // Course code like "MET", "DPP", etc.
   slug           String        @unique
   status         CourseStatus? @default(Active)
