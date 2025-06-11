@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
   const apiKey = req.headers.get('x-api-key');
@@ -24,6 +24,14 @@ export async function GET(
       },
     });
 
+    if (!university) {
+      return NextResponse.json({
+        data: null,
+        status: 404,
+        message: `University with ${id} not found`,
+      });
+    }
+
     return NextResponse.json({
       data: university,
       status: 200,
@@ -40,7 +48,7 @@ export async function GET(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
   const apiKey = req.headers.get('x-api-key');
