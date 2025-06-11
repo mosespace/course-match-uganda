@@ -116,7 +116,7 @@ export default function CoursesCard({
             </div>
 
             <Button size="sm" className="bg-primary w-full hover:bg-primary/80">
-              Learn More
+              Read More
             </Button>
           </CardContent>
         </Card>
