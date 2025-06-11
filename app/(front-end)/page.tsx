@@ -89,7 +89,7 @@ const teamMembers = [
     troubleMaker: false,
 
     image:
-      'https://img.freepik.com/premium-photo/png-cartoon-portrait-glasses-white-background_53876-905385.jpg?ga=GA1.1.1818589012.1736774497&semt=ais_hybrid',
+      'https://img.freepik.com/premium-photo/png-cartoon-portrait-glasses-black-background_53876-905385.jpg?ga=GA1.1.1818589012.1736774497&semt=ais_hybrid',
     socialMedia: {
       facebook: '#',
       twitter: '#',
@@ -171,7 +171,7 @@ export default function page() {
       <section>
         <div className="relative justify-center h-screen z-0 mx-auto items-center space-y-4 max-w-3xl md:pb-24 pt-16 text-center">
           <div>
-            <h1 className="mb-8 bg-gradient-to-t from-[#6d6d6d] to-[#f4f4f4] bg-clip-text text-4xl text-transparent md:text-7xl">
+            <h1 className="mb-8 bg-gradient-to-t from-slate-950 to-[#f4f4f4] bg-clip-text text-4xl text-transparent md:text-7xl">
               Advanced <span className="text-violet-500">Course Matching</span>{' '}
               with Expert Online Guidance
             </h1>
@@ -191,7 +191,7 @@ export default function page() {
           <img
             src="/dashed-arrow.svg"
             alt="Arrow pointing down"
-            className="w-[25rem] h-[15rem] object-cover invert"
+            className="w-[25rem] h-[15rem] object-cover"
           />
         </div>
 
@@ -199,7 +199,7 @@ export default function page() {
         <section className="py-20">
           <div className="container mx-auto px-4">
             <div className="text-center max-w-3xl mx-auto mb-16">
-              <h2 className="text-3xl font-bold mb-4 text-white">
+              <h2 className="text-3xl font-bold mb-4 text-black">
                 How Course-Match Works
               </h2>
               <p className="text-lg text-gray-600">
@@ -213,7 +213,7 @@ export default function page() {
                 <div key={i} className="relative">
                   <div className="border-[#f4f4f4]/50 border rounded-lg shadow-sm p-8 h-full relative z-10 hover:shadow-md transition-shadow">
                     <div
-                      className={`bg-violet-600 z-40 text-5xl p-1 font-bold opacity-10 absolute -top-2 -left-2 text-white`}
+                      className={`bg-violet-600 z-40 text-5xl p-1 font-bold opacity-20 absolute -top-2 -left-2 text-white`}
                     >
                       {item.step}
                     </div>
@@ -234,7 +234,7 @@ export default function page() {
                         />
                       )}
                     </div>
-                    <h3 className="text-xl text-white font-bold mb-3">
+                    <h3 className="text-xl text-black/75 font-bold mb-3">
                       {item.title}
                     </h3>
                     <p className="text-gray-600">{item.description}</p>
@@ -275,8 +275,8 @@ export default function page() {
         <section className="py-20" id="testimonials">
           <div className="container mx-auto px-4">
             <div className="text-center max-w-3xl mx-auto mb-16">
-              <h2 className="text-3xl font-bold mb-4 bg-gradient-to-t from-[#6d6d6d] to-[#f4f4f4] bg-clip-text text-transparent">
-                Trusted by businesses worldwide
+              <h2 className="text-3xl font-bold mb-4 bg-gradient-to-t from-[#6d6d6d] to-slate-950 bg-clip-text text-transparent">
+                Trusted by students in Uganda
               </h2>
               <p className="text-lg text-gray-600">
                 See what our customers have to say about our payroll solution

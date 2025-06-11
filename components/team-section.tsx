@@ -29,7 +29,7 @@ export default function TeamSection({
   teamMembers: TeamMember[];
 }) {
   return (
-    <section className={cn(`${backgroundColor} w-full py-16 text-white`)}>
+    <section className={cn(`${backgroundColor} w-full py-16 text-black`)}>
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <p className="text-violet-400 mb-2">{headline}</p>

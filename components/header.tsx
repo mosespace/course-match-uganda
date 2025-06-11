@@ -14,12 +14,12 @@ export const Header = () => {
   return (
     <>
       {isRoot ? (
-        <div className="absolute left-0 right-0 top-0 -z-10 h-52 bg-gradient-to-b from-violet-400/10 from-10% to-black" />
+        <div className="absolute left-0 right-0 top-0 -z-10 h-52 bg-gradient-to-b from-violet-400/10 from-10% to-white" />
       ) : null}
 
       <header className="container mx-auto flex max-w-5xl items-center justify-between px-4 py-8">
         <Link href="/">
-          <div className="text-xl text-gray-50">{siteConfig.name}</div>
+          <div className="text-xl text-slate-950">{siteConfig.name}</div>
         </Link>
         <nav className="flex items-center gap-6">
           <a
@@ -28,7 +28,7 @@ export const Header = () => {
             rel="noopener noreferrer"
             className="inline-flex"
           >
-            <TwitterLogoIcon className="h-6 w-6 text-gray-50 transition-colors hover:text-gray-400" />
+            <TwitterLogoIcon className="h-6 w-6 text-slate-950 transition-colors hover:text-violet-500" />
           </a>
           <a
             href="https://github.com/mosespace/cm-uganda"
@@ -36,7 +36,7 @@ export const Header = () => {
             rel="noopener noreferrer"
             className="inline-flex"
           >
-            <GitHubLogoIcon className="h-6 w-6 text-gray-50 transition-colors hover:text-gray-400" />
+            <GitHubLogoIcon className="h-6 w-6 text-slate-950 transition-colors hover:text-violet-500" />
           </a>
           {!isStart && (
             <Button asChild>

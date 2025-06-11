@@ -27,7 +27,7 @@ export default async function FrontEndLayout({
 
   return (
     <section>
-      <div className="bg-black">
+      <div className="bg-white">
         <div className="relative min-h-screen">
           <Header />
 
