@@ -71,7 +71,7 @@ export const authOptions: NextAuthOptions = {
         const isDevelopment = process.env.NODE_ENV === 'development';
         try {
           if (isDevelopment) {
-            console.log(`🪄 Magic Link: ${url}`);
+            console.log(`Magic Link ✅: ${url}`);
             return;
           }
 
@@ -82,7 +82,7 @@ export const authOptions: NextAuthOptions = {
             react: LoginLink({ url, email }),
           });
 
-          console.log(`✅ Verification email sent successfully to: ${email}`);
+          console.log(`Verification email sent successfully to ✅: ${email}`);
         } catch (error) {
           console.error('❌ Error sending verification email:', error);
           throw new Error('Error sending verification email');
@@ -140,7 +140,7 @@ export const authOptions: NextAuthOptions = {
           const environment = process.env.NODE_ENV;
 
           if (environment === 'development') {
-            console.log('Skipped ratelimit in development');
+            console.log('🔵 Skipped ratelimit in development');
             const { success } = await ratelimit.limit(credentials.email);
             if (!success) {
               throw new Error('Too many login attempts');
