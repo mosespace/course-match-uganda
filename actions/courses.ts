@@ -59,6 +59,7 @@ export async function getCourses(): Promise<ApiResponse<ICourse[]>> {
     const api = await getAuthenticatedApi();
 
     const res = await api.get('/courses');
+    // console.log('Response ✅:', res)
 
     const courses = res.data;
 

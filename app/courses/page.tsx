@@ -9,14 +9,12 @@ interface SearchParams {
   sort?: string;
 }
 
-interface PageProps {
-  searchParams: SearchParams;
-}
 
-export default function CoursesPage({ searchParams }: PageProps) {
+
+export default function CoursesPage() {
   return (
     <Suspense fallback={<></>}>
-      <CourseListingPage searchParams={searchParams} />
+      <CourseListingPage  />
     </Suspense>
   );
 }

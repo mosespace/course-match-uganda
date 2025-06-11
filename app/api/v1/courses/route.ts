@@ -1,11 +1,11 @@
 import { db } from '@/lib/db';
-import { generateCode } from '@/lib/generateCode';
 import { generateSlug } from '@/lib/generateSlug';
 import {
   normalizeCourseName,
   normalizeUniversityName,
 } from '@/utils/normalization';
 import { CourseLevel, CourseStatus } from '@prisma/client';
+import { headers } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
 // export async function POST(req: NextRequest) {
@@ -314,20 +314,45 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
-  const header_api_key = req.headers.get('x-api-key');
+  const headersList = await headers();
+  const apiKey = headersList.get('x-api-key');
   // console.log('API KEY ✅:', apiKey);
-  const apiKey = process.env.API_KEY;
-
-  try {
-    if (header_api_key !== apiKey) {
-      return NextResponse.json({
-        data: null,
-        message: 'You are not authorized to perform this action',
-        status: 401,
-      });
+ // check if the request has a valid header for x-api-key
+    if (!apiKey) {
+      return new Response(
+        JSON.stringify({
+          data: null,
+          error: 'API Key is required',
+          success: false,
+        }),
+        {
+          status: 401,
+          headers: { 'Content-Type': 'application/json' },
+        },
+      );
     }
 
-    const { searchParams } = new URL(req.url);
+  
+
+  try {
+      // check if the api-key from the headers is valid
+    const validKey = await db.user.findUnique({ where: { apiKey: apiKey } });
+
+    if (!validKey) {
+      return new Response(
+        JSON.stringify({
+          data: null,
+          error: 'Invalid API Key',
+          success: false,
+        }),
+        {
+          status: 403,
+          headers: { 'Content-Type': 'application/json' },
+        },
+      );
+    }
+
+    const  searchParams  = req.nextUrl.searchParams;
     const search = searchParams.get('search');
     const page = Number.parseInt(searchParams.get('page') || '1');
     const limit = Number.parseInt(searchParams.get('limit') || '10');
