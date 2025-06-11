@@ -64,7 +64,7 @@ export const authOptions: NextAuthOptions = {
     {
       id: 'resend',
       type: 'email',
-      role: 'EMPLOYEE',
+      role: 'STUDENT',
       maxAge: 5 * 60, // 5 minutes
       sendVerificationRequest: async (params: any) => {
         const { identifier: email, url } = params;
@@ -96,7 +96,7 @@ export const authOptions: NextAuthOptions = {
         return {
           id: profile.id.toString(),
           name: profile.name || profile.login,
-          role: 'EMPLOYEE',
+          role: 'STUDENT',
           email: profile.email,
           image: profile.avatar_url,
           isMachine: false,
@@ -114,7 +114,7 @@ export const authOptions: NextAuthOptions = {
           id: profile.sub,
           name: `${profile.given_name} ${profile.family_name}`,
           email: profile.email,
-          role: 'EMPLOYEE',
+          role: 'STUDENT',
           image: profile.picture,
           isMachine: false,
           invalidLoginAttempts: 0,
