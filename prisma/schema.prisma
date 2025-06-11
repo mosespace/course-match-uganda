@@ -20,6 +20,7 @@ enum SubjectCategory {
   SCIENCES
   ARTS
 }
+
 enum CourseLevel {
   CERTIFICATE
   DIPLOMA
@@ -49,19 +50,36 @@ model User {
   passwordHash         String?
   invalidLoginAttempts Int       @default(0)
   role                 Role      @default(STUDENT)
-  // System
+  
+  // Student-specific fields (only populated when role = STUDENT)
+  dateOfBirth          DateTime?
+  gender               String?
+  address              String?
+  schoolAttended       String?
+  completionYear       Int?
+  preferredCampuses    University[]
+  subjectIds           String[]
+  subjectCombinations  SubjectCombination[]
+
+  // Developer-specific fields (only populated when role = DEVELOPER)
+  companyName          String?
+  website              String?
+  apiKey               String?   @unique
+  apiKeyExpiry         DateTime?
+  isApproved           Boolean   @default(false)
+  requestLogs          ApiRequestLog[]
+
+  // Admin-specific fields (only populated when role = ADMIN)
+  permissions          Json?
+
+  // System fields
   lockedAt             DateTime?
   createdAt            DateTime  @default(now())
   updatedAt            DateTime  @updatedAt()
-  // isCampusModerator Boolean?  @default(false)
 
   // Relations
   feedbacks    Feedback[]
-  student      Student?
-  developer    Developer?
-  admin        Admin?
   favorites    Favorite[]
-  // searchHistory     SearchHistory[]
   accounts     Account[]
   sessions     Session[]
   activityLogs ActivityLog[] @relation("UserActivityLog")
@@ -125,63 +143,12 @@ model VerificationToken {
 model Feedback {
   id        String   @id @default(cuid())
   message   String?
-  user      User     @relation(fields: [userId], references: [id]) // Defining a many-to-one relationship
-  userId    String // Foreign key 
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @default(now()) @map(name: "updated_at")
 }
 
-// Student specific profile
-model Student {
-  id                String       @id @default(cuid())
-  userId            String       @unique
-  user              User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  dateOfBirth       DateTime?
-  gender            String?
-  address           String?
-  schoolAttended    String?
-  completionYear    Int?
-  preferredCampuses University[]
-  subjectIds        String[]
-
-  // Academic details
-  subjectCombinations SubjectCombination[]
-  // gradePoints         GradePoint[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-// Developer specific profile
-model Developer {
-  id           String   @id @default(cuid())
-  userId       String   @unique
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  companyName  String?
-  website      String?
-  apiKey       String   @unique
-  apiKeyExpiry DateTime
-  isApproved   Boolean  @default(false)
-
-  // API usage tracking
-  requestLogs ApiRequestLog[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-// Admin specific profile
-model Admin {
-  id          String @id @default(cuid())
-  userId      String @unique
-  user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  permissions Json?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-// University University model
 model University {
   id          String           @id @default(cuid())
   slug        String           @unique
@@ -194,46 +161,41 @@ model University {
 
   // Relations
   courses  Course[]
-  students Student[] // Students who selected this university as preferred
+  students User[] // Students who selected this university as preferred
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-// Course model
 model Course {
-  id             String        @id @default(cuid())
-  name           String
-  description    String?
-  code           String? // Course code like "MET", "DPP", etc.
-  slug           String        @unique
-  status         CourseStatus? @default(Active)
-  accreditedDate DateTime?
-  expiryDate     DateTime?
-  requiredSubjects Subject[] @relation("CourseRequiredSubjects")
-  // keywords            String[]
-  duration       Int? // In years
-  entryPoints    Int?
-  level          CourseLevel?  @default(CERTIFICATE) // Diploma, Bachelors, Masters, PhD
-  // specialRequirements String? // Like "An applicant must have passed Biology at 'O' Level"
+  id               String        @id @default(cuid())
+  name             String
+  description      String?
+  code             String?
+  slug             String        @unique
+  status           CourseStatus? @default(Active)
+  accreditedDate   DateTime?
+  expiryDate       DateTime?
+  requiredSubjects Subject[]     @relation("CourseRequiredSubjects")
+  duration         Int?
+  entryPoints      Int?
+  level            CourseLevel?  @default(CERTIFICATE)
 
   // Relations
   universityId String
   university   University @relation(fields: [universityId], references: [id])
-  // subjectRequirements CourseSubjectRequirement[]
   favorites    Favorite[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-// Subject model
 model Subject {
-  id          String  @id @default(cuid())
-  name        String  @unique
-  code        String  @unique
+  id          String          @id @default(cuid())
+  name        String          @unique
+  code        String          @unique
   description String?
-  category    SubjectCategory @default(SCIENCES) // e.g., "SCIENCE", "ARTS"
+  category    SubjectCategory @default(SCIENCES)
 
   // Relations
   requiredByCourses Course[] @relation("CourseRequiredSubjects")
@@ -242,62 +204,18 @@ model Subject {
   updatedAt DateTime @updatedAt
 }
 
-// Subject Combinations
 model SubjectCombination {
-  id          String  @id @default(cuid())
-  name        String // e.g., "PCM" for Physics, Chemistry, Mathematics
+  id          String @id @default(cuid())
+  name        String
   description String?
 
   // Relations
-  // subjects          SubjectCombinationSubject[]
-  // courses           CourseSubjectCombination[]
-  students Student[]
+  students User[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-// // Many-to-many relationship between SubjectCombination and Subject
-// model SubjectCombinationSubject {
-//   id                      String              @id @default(cuid())
-//   subjectCombinationId    String
-//   subjectId               String
-//   subjectCombination      SubjectCombination  @relation(fields: [subjectCombinationId], references: [id], onDelete: Cascade)
-//   subject                 Subject             @relation(fields: [subjectId], references: [id], onDelete: Cascade)
-
-//   @@unique([subjectCombinationId, subjectId])
-// }
-
-// // Many-to-many relationship between Course and SubjectCombination
-// model CourseSubjectCombination {
-//   id                      String              @id @default(cuid())
-//   courseId                String
-//   subjectCombinationId    String
-//   course                  Course              @relation(fields: [courseId], references: [id], onDelete: Cascade)
-//   subjectCombination      SubjectCombination  @relation(fields: [subjectCombinationId], references: [id], onDelete: Cascade)
-
-//   @@unique([courseId, subjectCombinationId])
-// }
-
-// Student's grade points for subjects
-// model GradePoint {
-//   id                String         @id @default(cuid())
-//   studentId         String
-//   subjectId         String
-//   grade             String         // A, B, C, D, E, F, etc.
-//   points            Int            // Corresponding points for the grade
-
-//   // Relations
-//   student           Student        @relation(fields: [studentId], references: [id], onDelete: Cascade)
-//   subject           Subject        @relation(fields: [subjectId], references: [id], onDelete: Cascade)
-
-//   createdAt         DateTime       @default(now())
-//   updatedAt         DateTime       @updatedAt
-
-//   @@unique([studentId, subjectId])
-// }
-
-// Student's favorite courses
 model Favorite {
   id       String @id @default(cuid())
   userId   String
@@ -312,18 +230,17 @@ model Favorite {
   @@unique([userId, courseId])
 }
 
-// API request logs
 model ApiRequestLog {
-  id           String  @id @default(cuid())
-  developerId  String
+  id           String @id @default(cuid())
+  userId       String // Changed from developerId to userId
   endpoint     String
   method       String
   statusCode   Int
-  responseTime Int // In milliseconds
+  responseTime Int
   ipAddress    String?
 
   // Relations
-  developer Developer @relation(fields: [developerId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   timestamp DateTime @default(now())
 }
