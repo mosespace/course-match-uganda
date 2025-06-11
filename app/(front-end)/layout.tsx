@@ -44,7 +44,7 @@ export default async function FrontEndLayout({
                 href="https://desishub.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="ml-1 text-gray-50"
+                className="ml-1 text-slate-950"
               >
                 @desishub
               </a>
