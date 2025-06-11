@@ -209,6 +209,7 @@ model Course {
   status         CourseStatus? @default(Active)
   accreditedDate DateTime?
   expiryDate     DateTime?
+  requiredSubjects Subject[] @relation("CourseRequiredSubjects")
   // keywords            String[]
   duration       Int? // In years
   entryPoints    Int?
@@ -232,6 +233,9 @@ model Subject {
   code        String  @unique
   description String?
   category    SubjectCategory @default(SCIENCES) // e.g., "SCIENCE", "ARTS"
+
+  // Relations
+  requiredByCourses Course[] @relation("CourseRequiredSubjects")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -306,19 +310,6 @@ model Favorite {
 
   @@unique([userId, courseId])
 }
-
-// Search history
-// model SearchHistory {
-//   id                String         @id @default(cuid())
-//   userId            String
-//   query             String
-//   filters           Json?
-
-//   // Relations
-//   user              User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-//   createdAt         DateTime       @default(now())
-// }
 
 // API request logs
 model ApiRequestLog {
