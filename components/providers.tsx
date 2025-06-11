@@ -1,19 +1,23 @@
 'use client';
 
-import { Toaster } from '@mosespace/toast';
-import { SessionProvider } from 'next-auth/react';
 import React from 'react';
+import QueryProvider from '@/lib/query-provider';
+import { SessionProvider } from 'next-auth/react';
+import { Analytics } from '@vercel/analytics/react';
+import { Toaster as MToast } from '@mosespace/toast';
 
 interface ProvidersProps {
   children: React.ReactNode;
-  session?: any; // Optional session prop
+  session?: any;
 }
-
 export default function Providers({ children, session }: ProvidersProps) {
   return (
     <SessionProvider session={session}>
-      {children}
-      <Toaster position="bottom-right" />
+      <QueryProvider>
+        {children}
+        <MToast position="bottom-left" />
+        <Analytics />
+      </QueryProvider>
     </SessionProvider>
   );
 }
