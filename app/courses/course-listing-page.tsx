@@ -13,6 +13,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { siteConfig } from '@/constants/site';
+import { useSuspenseCourses } from '@/hooks/tansatack/useCourses';
 import {
   BookOpen,
   ChevronRight,
@@ -22,130 +23,8 @@ import {
   Star,
 } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
-
-const courses = [
-  {
-    id: 1,
-    title: 'Career to build for the pro level',
-    instructor: 'Robert Fox',
-    students: '50+ Students',
-    rating: 4.8,
-    reviews: 156,
-    price: '$49',
-    originalPrice: '$99',
-    image: '/placeholder.svg?height=200&width=300',
-    category: 'Business English',
-    duration: '12 hours',
-    lessons: 24,
-    level: 'Beginner',
-    description: 'Master professional communication skills',
-    color: 'bg-blue-500',
-  },
-  {
-    id: 2,
-    title: 'Take A Course For Bright Future',
-    instructor: 'Robert Fox',
-    students: '50+ Students',
-    rating: 4.9,
-    reviews: 203,
-    price: '$59',
-    originalPrice: '$119',
-    image: '/placeholder.svg?height=200&width=300',
-    category: 'Web Design',
-    duration: '18 hours',
-    lessons: 32,
-    level: 'Intermediate',
-    description: 'Learn modern web design principles',
-    color: 'bg-purple-500',
-  },
-  {
-    id: 3,
-    title: 'Take A Course For Bright Future',
-    instructor: 'Robert Fox',
-    students: '50+ Students',
-    rating: 4.7,
-    reviews: 189,
-    price: '$39',
-    originalPrice: '$79',
-    image: '/placeholder.svg?height=200&width=300',
-    category: 'Programming',
-    duration: '15 hours',
-    lessons: 28,
-    level: 'Advanced',
-    description: 'Advanced programming concepts',
-    color: 'bg-green-500',
-  },
-  {
-    id: 4,
-    title: 'CSS - The Complete Guide 2020',
-    instructor: 'Robert Fox',
-    students: '50+ Students',
-    rating: 4.8,
-    reviews: 267,
-    price: '$45',
-    originalPrice: '$89',
-    image: '/placeholder.svg?height=200&width=300',
-    category: 'Web Development',
-    duration: '20 hours',
-    lessons: 35,
-    level: 'Beginner',
-    description: 'Complete CSS mastery course',
-    color: 'bg-orange-500',
-  },
-  {
-    id: 5,
-    title: 'Web Design For Beginners to Pro',
-    instructor: 'Robert Fox',
-    students: '50+ Students',
-    rating: 4.6,
-    reviews: 145,
-    price: '$55',
-    originalPrice: '$109',
-    image: '/placeholder.svg?height=200&width=300',
-    category: 'Web Design',
-    duration: '16 hours',
-    lessons: 30,
-    level: 'Beginner',
-    description: 'From basics to professional web design',
-    color: 'bg-blue-600',
-  },
-  {
-    id: 6,
-    title: 'Digitally Hosting Light And Color',
-    instructor: 'Robert Fox',
-    students: '50+ Students',
-    rating: 4.9,
-    reviews: 198,
-    price: '$65',
-    originalPrice: '$129',
-    image: '/placeholder.svg?height=200&width=300',
-    category: 'Digital Art',
-    duration: '14 hours',
-    lessons: 26,
-    level: 'Intermediate',
-    description: 'Master digital lighting techniques',
-    color: 'bg-pink-500',
-  },
-  {
-    id: 7,
-    title: 'Digitally Hosting Light And Color',
-    instructor: 'Robert Fox',
-    students: '50+ Students',
-    rating: 4.9,
-    reviews: 198,
-    price: '$65',
-    originalPrice: '$129',
-    image: '/placeholder.svg?height=200&width=300',
-    category: 'Digital Art',
-    duration: '14 hours',
-    lessons: 26,
-    level: 'Intermediate',
-    description: 'Master digital lighting techniques',
-    color: 'bg-pink-500',
-  },
-];
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useMemo, useState, useRef, useCallback } from 'react'; // Import useCallback
 
 const categories = [
   { name: 'Business English', count: 2500 },
@@ -160,7 +39,7 @@ const categories = [
   { name: 'Supply Chain Management', count: 430 },
 ];
 
-const instructors = [
+const descriptions = [
   { name: 'Steven Cooper', courses: 125 },
   { name: 'Alice Miller', courses: 98 },
   { name: 'Lewis Alexander', courses: 87 },
@@ -173,151 +52,218 @@ const instructors = [
   { name: 'Esther Howard', courses: 28 },
 ];
 
-const priceRanges = [
-  { label: 'All Courses', count: 500 },
-  { label: 'Free Courses', count: 120 },
-  { label: 'Paid Courses', count: 380 },
-  { label: 'Discounted Courses', count: 95 },
-  { label: 'Premium Courses', count: 45 },
+const yearRanges = [
+  { label: '3 Year(s)', count: 500 },
+  { label: '1 Year', count: 120 },
+  { label: '2 Year(s)', count: 380 },
+  { label: '4 Year(s)', count: 95 },
+  { label: '5 Year(s)', count: 45 },
 ];
 
-interface SearchParams {
-  search?: string;
-  category?: string;
-  instructor?: string;
-  price?: string;
-  sort?: string;
-  view?: string;
-  page?: string;
-}
-
-interface CourseListingPageProps {
-  searchParams: SearchParams;
-}
-
-export default function CourseListingPage({
-  searchParams,
-}: CourseListingPageProps) {
+export default function CourseListingPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const { courses } = useSuspenseCourses(); // This will suspend until data is ready
 
-  const [searchTerm, setSearchTerm] = useState(searchParams.search || '');
-  const [selectedCategory, setSelectedCategory] = useState(
-    searchParams.category || '',
-  );
-  const [selectedInstructor, setSelectedInstructor] = useState(
-    searchParams.instructor || '',
-  );
-  const [selectedPrice, setSelectedPrice] = useState(searchParams.price || '');
-  const [sortBy, setSortBy] = useState(searchParams.sort || 'default');
-  const [selectedCourse, setSelectedCourse] = useState(courses[0]);
+  // Use refs to store the current filter states without causing re-renders immediately
+  // This helps in debouncing URL updates
+  const searchTermRef = useRef('');
+  const selectedCategoryRef = useRef('');
+  const selectedDescriptionRef = useRef('');
+  const selectedYearsRef = useRef('');
+  const sortByRef = useRef('default');
+  const viewModeRef = useRef('grid');
+  const currentPageRef = useRef(1);
 
-  // Add view state and pagination state to the component
-  const [viewMode, setViewMode] = useState(searchParams.view || 'grid');
-  const [currentPage, setCurrentPage] = useState(
-    Number(searchParams.page) || 1,
-  );
+  // States that actually cause re-renders for UI updates
+  const [searchTerm, _setSearchTerm] = useState('');
+  const [selectedCategory, _setSelectedCategory] = useState('');
+  const [selectedDescription, _setSelectedDescription] = useState('');
+  const [selectedYears, _setSelectedYears] = useState('');
+  const [sortBy, _setSortBy] = useState('default');
+  const [viewMode, _setViewMode] = useState('grid');
+  const [currentPage, _setCurrentPage] = useState(1);
+
   const coursesPerPage = 6;
+  const initialRender = useRef(true); // Flag to prevent URL updates on the very first render
 
-  // Update URL when filters change
-  // Update the useEffect to include viewMode and currentPage in URL params
-  useEffect(() => {
+  // Use a single debounced function for URL updates
+  const updateUrl = useCallback(() => {
+    // Only update URL if the component has fully mounted and is not in its initial render cycle.
+    // We prevent URL updates on the very first render because the state is being initialized from the URL.
+    if (initialRender.current) return;
+
     const params = new URLSearchParams();
 
-    if (searchTerm) params.set('search', searchTerm);
-    if (selectedCategory) params.set('category', selectedCategory);
-    if (selectedInstructor) params.set('instructor', selectedInstructor);
-    if (selectedPrice) params.set('price', selectedPrice);
-    if (sortBy !== 'default') params.set('sort', sortBy);
-    if (viewMode !== 'grid') params.set('view', viewMode);
-    if (currentPage > 1) params.set('page', currentPage.toString());
+    // Use ref values for the URL parameters
+    if (searchTermRef.current) params.set('search', searchTermRef.current);
+    if (selectedCategoryRef.current) params.set('level', selectedCategoryRef.current);
+    if (selectedDescriptionRef.current) params.set('description', selectedDescriptionRef.current);
+    if (selectedYearsRef.current) params.set('year', selectedYearsRef.current);
+    if (sortByRef.current !== 'default') params.set('sort', sortByRef.current);
+    if (viewModeRef.current !== 'grid') params.set('view', viewModeRef.current);
+    if (currentPageRef.current > 1) params.set('page', currentPageRef.current.toString());
 
-    const newUrl = params.toString()
-      ? `/courses?${params.toString()}`
-      : '/courses';
-    router.replace(newUrl, { scroll: false });
+    const newUrl = params.toString() ? `/courses?${params.toString()}` : '/courses';
+
+    // Check if the current URL is different to avoid unnecessary navigations
+    if (typeof window !== 'undefined' && window.location.search !== `?${params.toString()}`) {
+      router.replace(newUrl, { scroll: false });
+    }
+  }, [router]);
+
+  // Effect to initialize state from URL params on mount
+  useEffect(() => {
+    if (searchParams) {
+      const initialSearchTerm = searchParams.get('search') || '';
+      const initialCategory = searchParams.get('level') || '';
+      const initialDescription = searchParams.get('description') || '';
+      const initialYears = searchParams.get('year') || '';
+      const initialSortBy = searchParams.get('sort') || 'default';
+      const initialViewMode = searchParams.get('view') || 'grid';
+      const initialPage = Number(searchParams.get('page')) || 1;
+
+      _setSearchTerm(initialSearchTerm);
+      _setSelectedCategory(initialCategory);
+      _setSelectedDescription(initialDescription);
+      _setSelectedYears(initialYears);
+      _setSortBy(initialSortBy);
+      _setViewMode(initialViewMode);
+      _setCurrentPage(initialPage);
+
+      // Also update refs immediately for the initial state
+      searchTermRef.current = initialSearchTerm;
+      selectedCategoryRef.current = initialCategory;
+      selectedDescriptionRef.current = initialDescription;
+      selectedYearsRef.current = initialYears;
+      sortByRef.current = initialSortBy;
+      viewModeRef.current = initialViewMode;
+      currentPageRef.current = initialPage;
+    }
+    initialRender.current = false; // Mark initial render as complete after state initialization
+  }, [searchParams]); // Depend only on searchParams
+
+  // Effect to sync URL when filter/pagination states change (debounced)
+  useEffect(() => {
+    // Update refs with latest state values
+    searchTermRef.current = searchTerm;
+    selectedCategoryRef.current = selectedCategory;
+    selectedDescriptionRef.current = selectedDescription;
+    selectedYearsRef.current = selectedYears;
+    sortByRef.current = sortBy;
+    viewModeRef.current = viewMode;
+    currentPageRef.current = currentPage;
+
+    const handler = setTimeout(() => {
+      updateUrl();
+    }, 300); // Debounce time
+
+    return () => {
+      clearTimeout(handler);
+    };
   }, [
     searchTerm,
     selectedCategory,
-    selectedInstructor,
-    selectedPrice,
+    selectedDescription,
+    selectedYears,
     sortBy,
     viewMode,
     currentPage,
-    router,
+    updateUrl, // Add updateUrl to dependencies
   ]);
+
+  // Helper functions to update state and trigger URL sync indirectly
+  const setSearchTerm = (value) => {
+    _setSearchTerm(value);
+    _setCurrentPage(1); // Reset page on filter change
+  };
+  const setSelectedCategory = (value) => {
+    _setSelectedCategory(value);
+    _setCurrentPage(1);
+  };
+  const setSelectedDescription = (value) => {
+    _setSelectedDescription(value);
+    _setCurrentPage(1);
+  };
+  const setSelectedYears = (value) => {
+    _setSelectedYears(value);
+    _setCurrentPage(1);
+  };
+  const setSortBy = (value) => {
+    _setSortBy(value);
+    _setCurrentPage(1);
+  };
+  const setViewMode = (value) => {
+    _setViewMode(value);
+  };
+  const setCurrentPage = (value) => {
+    _setCurrentPage(value);
+  };
 
   const filteredCourses = useMemo(() => {
     const filtered = courses.filter((course) => {
       const matchesSearch =
-        course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        course.instructor.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        course.category.toLowerCase().includes(searchTerm.toLowerCase());
+        course.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        course.level?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        course.description?.toLowerCase().includes(searchTerm.toLowerCase());
 
-      const matchesCategory =
-        !selectedCategory || course.category === selectedCategory;
+      // Ensure that `level` and `description` are correctly mapped if they are IDs or different strings
+      // For categories, ensure `course.level` matches `selectedCategory.name` or `selectedCategory` itself
+      const matchesLevel =
+        !selectedCategory ||
+        course.level === selectedCategory ||
+        categories.find((cat) => cat.name === selectedCategory)?.name === course.level;
 
-      const matchesInstructor =
-        !selectedInstructor || course.instructor === selectedInstructor;
+      // For descriptions, ensure `course.description` matches `selectedDescription.name` or `selectedDescription` itself
+      const matchesDescription =
+        !selectedDescription ||
+        course.description === selectedDescription ||
+        descriptions.find((desc) => desc.name === selectedDescription)?.name ===
+          course.description;
 
-      const matchesPrice =
-        !selectedPrice ||
-        (selectedPrice === 'Free Courses' && course.price === 'Free') ||
-        (selectedPrice === 'Paid Courses' && course.price !== 'Free') ||
-        selectedPrice === 'All Courses';
+      const matchesYears =
+        !selectedYears ||
+        (selectedYears === '1 Year' && course.duration === 1) ||
+        (selectedYears === '2 Year(s)' && course.duration === 2) ||
+        (selectedYears === '3 Year(s)' && course.duration === 3) ||
+        (selectedYears === '4 Year(s)' && course.duration === 4) ||
+        (selectedYears === '5 Year(s)' && course.duration === 5);
 
-      return (
-        matchesSearch && matchesCategory && matchesInstructor && matchesPrice
-      );
+      return matchesSearch && matchesLevel && matchesDescription && matchesYears;
     });
 
-    // Sort courses
+    // Sorting
     switch (sortBy) {
       case 'rating':
         filtered.sort((a, b) => b.rating - a.rating);
         break;
-      case 'price-low':
-        filtered.sort(
-          (a, b) =>
-            Number.parseInt(a.price.replace('$', '')) -
-            Number.parseInt(b.price.replace('$', '')),
-        );
+      case 'year-low':
+        filtered.sort((a, b) => Number(a.year) - Number(b.year));
         break;
-      case 'price-high':
-        filtered.sort(
-          (a, b) =>
-            Number.parseInt(b.price.replace('$', '')) -
-            Number.parseInt(a.price.replace('$', '')),
-        );
+      case 'year-high':
+        filtered.sort((a, b) => Number(b.year) - Number(a.year));
         break;
       case 'students':
-        filtered.sort(
-          (a, b) =>
-            Number.parseInt(b.students.replace(/\D/g, '')) -
-            Number.parseInt(a.students.replace(/\D/g, '')),
-        );
-        break;
-      default:
-        // Keep original order
+        filtered.sort((a, b) => Number(b.students) - Number(a.students));
         break;
     }
 
     return filtered;
-  }, [searchTerm, selectedCategory, selectedInstructor, selectedPrice, sortBy]);
+  }, [
+    courses,
+    searchTerm,
+    selectedCategory,
+    selectedDescription,
+    selectedYears,
+    sortBy,
+  ]);
 
-  // Add pagination logic to the filteredCourses
   const paginatedCourses = useMemo(() => {
     const startIndex = (currentPage - 1) * coursesPerPage;
-    const endIndex = startIndex + coursesPerPage;
-    return filteredCourses.slice(startIndex, endIndex);
-  }, [filteredCourses, currentPage, coursesPerPage]);
+    return filteredCourses.slice(startIndex, startIndex + coursesPerPage);
+  }, [filteredCourses, currentPage]);
 
-  // Add totalPages calculation
   const totalPages = Math.ceil(filteredCourses.length / coursesPerPage);
-
-  // Reset page when filters change
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm, selectedCategory, selectedInstructor, selectedPrice, sortBy]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -368,83 +314,83 @@ export default function CourseListingPage({
                   Course Categories
                 </h3>
                 <div className="space-y-2">
-                  {categories.map((category) => (
+                  {categories.map((level) => (
                     <div
-                      key={category.name}
+                      key={level.name}
                       className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition-colors ${
-                        selectedCategory === category.name
+                        selectedCategory === level.name
                           ? 'bg-orange-50 text-orange-700'
                           : 'hover:bg-gray-50 text-gray-700'
                       }`}
                       onClick={() =>
                         setSelectedCategory(
-                          selectedCategory === category.name
+                          selectedCategory === level.name
                             ? ''
-                            : category.name,
+                            : level.name,
                         )
                       }
                     >
                       <span className="text-sm font-medium">
-                        {category.name}
+                        {level.name}
                       </span>
                       <span className="text-xs text-gray-500">
-                        ({category.count})
+                        ({level.count})
                       </span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* Instructors */}
+              {/* Descriptions */}
               <div className="mb-8">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                  Instructors
+                  Descriptions
                 </h3>
                 <div className="space-y-2">
-                  {instructors.slice(0, 8).map((instructor) => (
+                  {descriptions.slice(0, 8).map((description) => (
                     <div
-                      key={instructor.name}
+                      key={description.name}
                       className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition-colors ${
-                        selectedInstructor === instructor.name
+                        selectedDescription === description.name
                           ? 'bg-orange-50 text-orange-700'
                           : 'hover:bg-gray-50 text-gray-700'
                       }`}
                       onClick={() =>
-                        setSelectedInstructor(
-                          selectedInstructor === instructor.name
+                        setSelectedDescription(
+                          selectedDescription === description.name
                             ? ''
-                            : instructor.name,
+                            : description.name,
                         )
                       }
                     >
                       <span className="text-sm font-medium">
-                        {instructor.name}
+                        {description.name}
                       </span>
                       <span className="text-xs text-gray-500">
-                        ({instructor.courses})
+                        ({description.courses})
                       </span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* Price With Courses */}
+              {/* Years With Courses */}
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                  Price With Courses
+                  Years With Courses
                 </h3>
                 <div className="space-y-2">
-                  {priceRanges.map((range) => (
+                  {yearRanges.map((range) => (
                     <div
                       key={range.label}
                       className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition-colors ${
-                        selectedPrice === range.label
+                        selectedYears === range.label
                           ? 'bg-orange-50 text-orange-700'
                           : 'hover:bg-gray-50 text-gray-700'
                       }`}
                       onClick={() =>
-                        setSelectedPrice(
-                          selectedPrice === range.label ? '' : range.label,
+                        setSelectedYears(
+                          selectedYears === range.label ? '' : range.label,
                         )
                       }
                     >
@@ -481,11 +427,11 @@ export default function CourseListingPage({
                   <SelectContent>
                     <SelectItem value="default">Default</SelectItem>
                     <SelectItem value="rating">Highest Rated</SelectItem>
-                    <SelectItem value="price-low">
-                      Price: Low to High
+                    <SelectItem value="year-low">
+                      Years: Low to High
                     </SelectItem>
-                    <SelectItem value="price-high">
-                      Price: High to Low
+                    <SelectItem value="year-high">
+                      Years: High to Low
                     </SelectItem>
                     <SelectItem value="students">Most Popular</SelectItem>
                   </SelectContent>
