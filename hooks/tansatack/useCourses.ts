@@ -25,6 +25,7 @@ export function useSuspenseCourses() {
       }
       return courseApi.courses();
     },
+    staleTime: 1000 * 60 * 5,
   });
 
   return {

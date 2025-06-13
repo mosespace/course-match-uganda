@@ -317,25 +317,23 @@ export async function GET(req: NextRequest) {
   const headersList = await headers();
   const apiKey = headersList.get('x-api-key');
   // console.log('API KEY ✅:', apiKey);
- // check if the request has a valid header for x-api-key
-    if (!apiKey) {
-      return new Response(
-        JSON.stringify({
-          data: null,
-          error: 'API Key is required',
-          success: false,
-        }),
-        {
-          status: 401,
-          headers: { 'Content-Type': 'application/json' },
-        },
-      );
-    }
-
-  
+  // check if the request has a valid header for x-api-key
+  if (!apiKey) {
+    return new Response(
+      JSON.stringify({
+        data: null,
+        error: 'API Key is required',
+        success: false,
+      }),
+      {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' },
+      },
+    );
+  }
 
   try {
-      // check if the api-key from the headers is valid
+    // check if the api-key from the headers is valid
     const validKey = await db.user.findUnique({ where: { apiKey: apiKey } });
 
     if (!validKey) {
@@ -352,7 +350,7 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const  searchParams  = req.nextUrl.searchParams;
+    const searchParams = req.nextUrl.searchParams;
     const search = searchParams.get('search');
     const page = Number.parseInt(searchParams.get('page') || '1');
     const limit = Number.parseInt(searchParams.get('limit') || '10');
@@ -375,6 +373,9 @@ export async function GET(req: NextRequest) {
       take: limit,
       orderBy: {
         createdAt: 'desc',
+      },
+      include: {
+        university: true,
       },
     });
 
