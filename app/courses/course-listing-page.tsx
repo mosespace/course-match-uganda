@@ -5,10 +5,8 @@ import CourseResultsSection from '@/components/courses/course-results-section';
 import { siteConfig } from '@/constants/site';
 import { useSuspenseCourses } from '@/hooks/tansatack/useCourses';
 import { useUrlSync } from '@/hooks/use-url-sync'; // Import the new hook
-import { ChevronRight } from 'lucide-react';
-import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
 import { CourseLevel } from '@prisma/client'; // Assuming you still need this for internal filtering logic
+import { useEffect, useMemo, useState } from 'react';
 
 // Dummy data (moved here to centralize if not fetched or for direct use in logic)
 // Make sure this is consistent with CourseFilterSidebar dummy data or fetched data
@@ -121,7 +119,9 @@ export default function CourseListingPage() {
     switch (sortBy) {
       case 'rating':
         filtered.sort(
-          (a, b) => Number(b.averageRating || 0) - Number(a.averageRating || 0),
+          (a, b) =>
+            Number((b.averageRating as any) || 0) -
+            Number(a.averageRating || 0),
         );
         break;
       case 'year-low':
@@ -191,7 +191,7 @@ export default function CourseListingPage() {
 
           {/* Right Content Area for Courses */}
           <CourseResultsSection
-            paginatedCourses={paginatedCourses}
+            paginatedCourses={paginatedCourses as any}
             filteredCoursesCount={totalFilteredCourses}
             sortBy={sortBy}
             setSortBy={setSortBy}

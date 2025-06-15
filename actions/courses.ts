@@ -1,7 +1,13 @@
 'use server';
 
 import { getAuthenticatedApi } from '@/lib/axios';
-import { CourseLevel, CourseStatus, Favorite, Subject } from '@prisma/client';
+import {
+  CourseLevel,
+  CourseStatus,
+  Favorite,
+  Subject,
+  University,
+} from '@prisma/client';
 
 export interface ApiResponse<T> {
   success: boolean;
@@ -22,8 +28,10 @@ export type ICourse = {
   requiredSubject?: Subject[];
   duration?: number;
   level?: CourseLevel;
-  universityId?: string;
+  university?: University;
   favorites: Favorite;
+  averageRating?: number;
+  studentsCount?: number;
 };
 
 export type ICourseCreate = Omit<ICourse, 'id'>;
