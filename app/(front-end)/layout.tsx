@@ -19,9 +19,9 @@ export default async function FrontEndLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   const session = await getServerSession(authOptions);
 
-  if (!session) {
-    redirect(`/login?callback=${encodeURIComponent('/start')}`);
-  }
+  // if (!session) {
+  //   redirect(`/login?callback=${encodeURIComponent('/start')}`);
+  // }
 
   // console.log(`Session User:`, session);
 
