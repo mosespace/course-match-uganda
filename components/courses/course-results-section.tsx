@@ -26,7 +26,7 @@ interface CourseResultsSectionProps {
   viewMode: string;
   setViewMode: (value: string) => void;
   currentPage: number;
-  setCurrentPage: (value: number) => void;
+  setCurrentPage: (value: number | ((prev: number) => number)) => void;
   totalPages: number;
   coursesPerPage: number;
 }
@@ -172,7 +172,7 @@ export default function CourseResultsSection({
             variant="outline"
             size="sm"
             onClick={() =>
-              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              setCurrentPage((prev: any) => Math.min(prev + 1, totalPages))
             }
             disabled={currentPage === totalPages}
             className="border-gray-300"
