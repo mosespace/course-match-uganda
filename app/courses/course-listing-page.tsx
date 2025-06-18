@@ -4,12 +4,10 @@ import CourseFilterSidebar from '@/components/courses/course-filter-sidebar';
 import CourseResultsSection from '@/components/courses/course-results-section';
 import { siteConfig } from '@/constants/site';
 import { useSuspenseCourses } from '@/hooks/tansatack/useCourses';
-import { useUrlSync } from '@/hooks/use-url-sync'; // Import the new hook
-import { CourseLevel } from '@prisma/client'; // Assuming you still need this for internal filtering logic
+import { useUrlSync } from '@/hooks/use-url-sync';
+import { CourseLevel } from '@prisma/client';
 import { useEffect, useMemo, useState } from 'react';
 
-// Dummy data (moved here to centralize if not fetched or for direct use in logic)
-// Make sure this is consistent with CourseFilterSidebar dummy data or fetched data
 const categories = [
   { name: 'Business English', count: 2500, level: CourseLevel.BACHELORS },
   { name: 'English Conversation', count: 1800, level: CourseLevel.DIPLOMA },
