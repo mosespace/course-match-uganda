@@ -1,11 +1,13 @@
 import { Header } from '@/components/header';
 import { SendFeedback } from '@/components/send-feedback';
+import { authOptions } from '@/lib/auth';
+import { getServerSession } from 'next-auth';
 import React from 'react';
 
 export default async function FrontEndLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  // const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions);
 
   // if (!session) {
   //   redirect(`/login?callback=${encodeURIComponent('/start')}`);
